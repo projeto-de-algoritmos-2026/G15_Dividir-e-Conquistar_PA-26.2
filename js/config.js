@@ -18,6 +18,21 @@
     INITIAL_INFECTED: 4,
     DISTRICT_COLUMNS: 4,
     DISTRICT_ROWS: 3,
+    // Quantos níveis iniciais da árvore de Pairs definem os distritos:
+    // 1 = até 2 distritos; 2 = até 4 distritos.
+    DISTRICT_DEPTH: 2,
+
+    // Distribuição espacial opcional. weight é a fração aproximada
+    // da população colocada em cada mancha gaussiana.
+    DENSITY_REGIONS: Object.freeze([
+      Object.freeze({
+        x: 550,
+        y: 360,
+        radiusX: 125,
+        radiusY: 95,
+        weight: 0.35
+      })
+    ]),
     PERSON_RADIUS: 3.2,
     QUARANTINE_SPEED_FACTOR: 0,
     DISTANCING_MIN_STRENGTH: 0,
