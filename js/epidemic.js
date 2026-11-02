@@ -7,8 +7,8 @@
   var Epidemic = {};
   var Utils = window.Contagio.Utils;
 
-  function getConfig() {
-    var config = window.Contagio.Config;
+  function getConfig(world) {
+    var config = (world && world.config) || window.Contagio.Config;
     if (!config) {
       throw new Error('Contagio.Config deve ser carregado antes de Contagio.Epidemic.');
     }
@@ -86,7 +86,7 @@
    * O embaralhamento é feito em uma cópia para não reordenar world.people.
    */
   Epidemic.seed = function (world, n) {
-    getConfig();
+    getConfig(world);
 
     var amount = Math.max(0, Math.min(
       world.people.length,
@@ -157,7 +157,7 @@
    * se qualquer integrante do par estiver em quarentena.
    */
   Epidemic.step = function (world, pairs) {
-    var config = getConfig();
+    var config = getConfig(world);
     var contactRadius = Math.max(0, config.CONTACT_RADIUS || 0);
     var infectionProbability = Utils.clamp(
       Number.isFinite(config.INFECTION_PROB) ? config.INFECTION_PROB : 0,
@@ -257,11 +257,16 @@
     world.stats = world.stats || {};
     world.stats.newInfections = result.newInfections;
     world.stats.recoveries = result.recoveries;
-    // step representa o fechamento do próximo turno; Game incrementa world.day
-    // ao concluir a sequência completa de atualização.
-    recordHistory(world, (Number.isFinite(world.day) ? world.day : 0) + 1);
-
+    // O histórico é fechado por Game somente depois de Actions.tickActions,
+    // respeitando a ordem oficial do turno.
     return result;
+  };
+
+  // Registra uma fotografia do mundo. Game chama este método após incrementar
+  // world.day e atualizar as estatísticas, ao final do turno completo.
+  Epidemic.recordHistory = function (world, day) {
+    getConfig(world);
+    return recordHistory(world, Number.isFinite(day) ? day : world.day);
   };
 
   window.Contagio.Epidemic = Object.freeze(Epidemic);

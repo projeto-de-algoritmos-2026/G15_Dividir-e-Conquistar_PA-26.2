@@ -17,7 +17,11 @@
   var scaleX = 1;
   var scaleY = 1;
   var hoveredPerson = null;
-  var animationFrameId = null;
+  var pointerLeaveHandler = function () {
+    hoveredPerson = null;
+    if (tooltip) tooltip.style.display = 'none';
+  };
+  var resizeHandler = function () { resizeCanvas(); };
 
   var STATE_ORDER = ['S', 'I', 'R', 'V'];
   var FALLBACK_COLORS = {
@@ -28,7 +32,7 @@
   };
 
   function getConfig() {
-    return window.Contagio.Config || {};
+    return (currentWorld && currentWorld.config) || window.Contagio.Config || {};
   }
 
   function readCssColor(variable, fallback) {
@@ -427,10 +431,7 @@
   function attachEvents() {
     if (!canvas) return;
     canvas.addEventListener('pointermove', updateHover);
-    canvas.addEventListener('pointerleave', function () {
-      hoveredPerson = null;
-      if (tooltip) tooltip.style.display = 'none';
-    });
+    canvas.addEventListener('pointerleave', pointerLeaveHandler);
   }
 
   Renderer.init = function (targetCanvas) {
@@ -440,12 +441,18 @@
 
     if (canvas && canvas !== targetCanvas) {
       canvas.removeEventListener('pointermove', updateHover);
+      canvas.removeEventListener('pointerleave', pointerLeaveHandler);
     }
 
+    if (canvas === targetCanvas) {
+      canvas.removeEventListener('pointermove', updateHover);
+      canvas.removeEventListener('pointerleave', pointerLeaveHandler);
+    }
     canvas = targetCanvas;
     context = canvas.getContext('2d');
     if (!context) throw new Error('Não foi possível obter o contexto 2D do canvas.');
 
+    if (tooltip && tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
     tooltip = null;
     hoveredPerson = null;
     ensureTooltip();
@@ -456,7 +463,8 @@
       resizeObserver = new ResizeObserver(resizeCanvas);
       resizeObserver.observe(canvas);
     } else {
-      window.addEventListener('resize', resizeCanvas);
+      window.removeEventListener('resize', resizeHandler);
+      window.addEventListener('resize', resizeHandler);
     }
 
     resizeCanvas();
@@ -485,24 +493,6 @@
     var colors = getStateColors();
     drawPeople(world, currentOptions, colors, Date.now());
 
-    // Mantém a pulsação suave mesmo quando o jogo avança por turnos discretos.
-    // Só existe um RAF ativo e ele para automaticamente quando não há infectados.
-    var hasInfected = false;
-    for (var infectedIndex = 0; infectedIndex < world.people.length; infectedIndex += 1) {
-      if (world.people[infectedIndex].state === 'I') {
-        hasInfected = true;
-        break;
-      }
-    }
-    if (hasInfected && animationFrameId === null && typeof window.requestAnimationFrame === 'function') {
-      animationFrameId = window.requestAnimationFrame(function animateInfected() {
-        animationFrameId = null;
-        if (currentWorld) Renderer.draw(currentWorld, currentOptions);
-      });
-    } else if (!hasInfected && animationFrameId !== null && typeof window.cancelAnimationFrame === 'function') {
-      window.cancelAnimationFrame(animationFrameId);
-      animationFrameId = null;
-    }
 
     return Renderer;
   };

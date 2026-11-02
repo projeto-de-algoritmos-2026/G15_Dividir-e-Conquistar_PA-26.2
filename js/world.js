@@ -118,12 +118,20 @@
   World.create = function (config) {
     config = getConfig(config);
 
-    var population = config.POPULATION;
+    var population = Number(config.POPULATION);
+    if (!Number.isFinite(population) || population < 0 || Math.floor(population) !== population) {
+      throw new RangeError('POPULATION deve ser um inteiro maior ou igual a zero.');
+    }
+    if (!Number.isFinite(config.WORLD_WIDTH) || config.WORLD_WIDTH <= 0 ||
+        !Number.isFinite(config.WORLD_HEIGHT) || config.WORLD_HEIGHT <= 0) {
+      throw new RangeError('WORLD_WIDTH e WORLD_HEIGHT devem ser números positivos e finitos.');
+    }
     var regions = Array.isArray(config.DENSITY_REGIONS)
       ? config.DENSITY_REGIONS
       : [];
 
     var world = {
+      config: config,
       width: config.WORLD_WIDTH,
       height: config.WORLD_HEIGHT,
       people: [],
@@ -169,12 +177,17 @@
    * Pessoas em quarentena ficam completamente imóveis.
    */
   World.step = function (world) {
-    var config = getConfig();
-    var maxSpeed = config.MOVE_SPEED;
+    var config = getConfig(world && world.config);
+    var maxSpeed = Number.isFinite(config.MOVE_SPEED) ? Math.max(0, config.MOVE_SPEED) : 0;
     var maxTurn = 0.22;
     var speedVariation = 0.08;
 
     world.people.forEach(function (person) {
+      if (!Number.isFinite(person.x)) person.x = Utils.randRange(0, world.width);
+      if (!Number.isFinite(person.y)) person.y = Utils.randRange(0, world.height);
+      if (!Number.isFinite(person.vx)) person.vx = 0;
+      if (!Number.isFinite(person.vy)) person.vy = 0;
+
       if (person.quarantined) {
         person.vx = 0;
         person.vy = 0;
@@ -251,7 +264,7 @@
    * para o filho direito.
    */
   World.updateDistricts = function (world, tree) {
-    var config = getConfig();
+    var config = getConfig(world && world.config);
     var maxDepth = Number.isInteger(config.DISTRICT_DEPTH)
       ? Math.max(1, config.DISTRICT_DEPTH)
       : 1;

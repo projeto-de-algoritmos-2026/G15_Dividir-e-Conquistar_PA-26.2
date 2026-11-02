@@ -7,8 +7,8 @@
   var Actions = {};
   var Utils = window.Contagio.Utils;
 
-  function config() {
-    var value = window.Contagio.Config;
+  function config(world) {
+    var value = (world && world.config) || window.Contagio.Config;
     if (!value) throw new Error('Contagio.Config deve ser carregado antes de Contagio.Actions.');
     if (!Utils) throw new Error('Contagio.Utils deve ser carregado antes de Contagio.Actions.');
     return value;
@@ -29,7 +29,7 @@
     state.tracedQuarantine = state.tracedQuarantine || {};
     state.distancing = state.distancing || { active: false, strength: 0, daysRemaining: 0 };
     if (!Number.isFinite(world.budget)) {
-      world.budget = Number.isFinite(config().INITIAL_BUDGET) ? config().INITIAL_BUDGET : 100;
+      world.budget = Number.isFinite(config(world).INITIAL_BUDGET) ? config(world).INITIAL_BUDGET : 100;
     }
     return state;
   }
@@ -65,7 +65,7 @@
    * aplica QUARANTINE_LEAKAGE aos contatos que envolvem pessoas isoladas.
    */
   Actions.lockdownDistrict = function (world, districtId) {
-    var cfg = config();
+    var cfg = config(world);
     var state = ensureState(world);
     var district = (world.districts || []).find(function (item) {
       return String(item.id) === String(districtId);
@@ -103,7 +103,7 @@
    * atualizam sua intensidade. O custo é cobrado diariamente por tickActions.
    */
   Actions.distancing = function (world, strength) {
-    var cfg = config();
+    var cfg = config(world);
     var state = ensureState(world);
     var min = Number.isFinite(cfg.DISTANCING_MIN_STRENGTH) ? cfg.DISTANCING_MIN_STRENGTH : 0;
     var max = Number.isFinite(cfg.DISTANCING_MAX_STRENGTH) ? cfg.DISTANCING_MAX_STRENGTH : 1;
@@ -134,7 +134,7 @@
    * pessoa em O(k), onde k é o número de pares encontrados.
    */
   Actions.vaccinate = function (world, n) {
-    var cfg = config();
+    var cfg = config(world);
     ensureState(world);
     var requested = Math.max(0, Math.floor(Number(n) || 0));
     if (requested === 0) return result(false, 0, 'Informe uma quantidade positiva de vacinas.');
@@ -177,7 +177,7 @@
 
   /** Marca para a UI os suscetíveis que tiveram contato com infectados. */
   Actions.trace = function (world) {
-    var cfg = config();
+    var cfg = config(world);
     var state = ensureState(world);
     var epidemic = window.Contagio.Epidemic;
     if (!epidemic || typeof epidemic.getTracedPeople !== 'function') {
@@ -198,7 +198,7 @@
    * A lista permanece disponível para o renderer/UI destacar os contatos.
    */
   Actions.quarantineTraced = function (world) {
-    var cfg = config();
+    var cfg = config(world);
     var state = ensureState(world);
     var traced = state.tracedPeople || [];
     var candidates = traced.filter(function (person) {
@@ -226,7 +226,7 @@
    * Deve ser chamado uma vez por dia, ao fechar o turno.
    */
   Actions.tickActions = function (world) {
-    var cfg = config();
+    var cfg = config(world);
     var state = ensureState(world);
     var releasedLockdowns = 0;
     var releasedTraces = 0;

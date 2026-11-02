@@ -7,7 +7,6 @@
   var UI = {};
   var game = null;
   var world = null;
-  var playTimer = null;
   var speed = 1;
   var selectingDistrict = false;
   var awaitingTraceIsolation = false;
@@ -22,10 +21,12 @@
     tracedPeople: []
   };
   var elements = {};
+  var eventsBound = false;
+  var toastTimers = [];
 
   function byId(id) { return document.getElementById(id); }
 
-  function config() { return window.Contagio.Config || {}; }
+  function config() { return (world && world.config) || window.Contagio.Config || {}; }
 
   function resolveWorld() {
     if (!game) return world;
@@ -139,10 +140,23 @@
     item.textContent = message || (ok ? 'Medida aplicada.' : 'Não foi possível aplicar a medida.');
     root.appendChild(item);
     window.requestAnimationFrame(function () { item.classList.add('is-visible'); });
-    window.setTimeout(function () {
+    var firstTimer = window.setTimeout(function () {
+      toastTimers = toastTimers.filter(function (timer) { return timer !== firstTimer; });
       item.classList.remove('is-visible');
-      window.setTimeout(function () { if (item.parentNode) item.parentNode.removeChild(item); }, 260);
+      var secondTimer = window.setTimeout(function () {
+        toastTimers = toastTimers.filter(function (timer) { return timer !== secondTimer; });
+        if (item.parentNode) item.parentNode.removeChild(item);
+      }, 260);
+      toastTimers.push(secondTimer);
     }, 3200);
+    toastTimers.push(firstTimer);
+  }
+
+  function clearToastTimers() {
+    toastTimers.forEach(function (timer) { window.clearTimeout(timer); });
+    toastTimers = [];
+    var root = elements.toastRoot || byId('toast-root');
+    if (root) root.textContent = '';
   }
 
   function actionResult(result) {
@@ -187,20 +201,12 @@
   }
 
   function togglePlay(forceState) {
-    var shouldPlay = typeof forceState === 'boolean' ? forceState : !Boolean(playTimer);
-    if (playTimer) {
-      window.clearInterval(playTimer);
-      playTimer = null;
-    }
-    if (shouldPlay) {
-      var interval = Math.max(50, (Number(config().PLAY_INTERVAL_MS) || 700) / speed);
-      playTimer = window.setInterval(function () {
-        if (!game || typeof game.nextTurn !== 'function') return;
-        var turnResult = game.nextTurn();
-        var latest = resolveWorld();
-        if (latest) UI.update(latest, turnResult || {});
-      }, interval);
-    }
+    var shouldPlay = typeof forceState === 'boolean'
+      ? forceState
+      : !(game && typeof game.isPlaying === 'function' && game.isPlaying());
+    if (!game) return;
+    if (shouldPlay && typeof game.play === 'function') game.play();
+    else if (!shouldPlay && typeof game.pause === 'function') game.pause();
     setText('play-label', shouldPlay ? 'Pause' : 'Play');
     setText('play-icon', shouldPlay ? 'Ⅱ' : '▶');
     var button = elements.playPause;
@@ -209,30 +215,26 @@
 
   function nextDay() {
     if (!game || typeof game.nextTurn !== 'function') return;
-    var turnResult = game.nextTurn();
-    var latest = resolveWorld();
-    if (latest) UI.update(latest, turnResult || {});
+    game.nextTurn();
   }
 
   function startGame(levelIndex) {
     currentLevelIndex = Math.max(0, Number(levelIndex) || 0);
+    clearToastTimers();
     measuresUsed = 0;
     peakInfected = 0;
     awaitingTraceIsolation = false;
+    renderOptions.highlightTraced = false;
+    renderOptions.tracedPeople = [];
     showSelectionHint(false);
     togglePlay(false);
     if (game && typeof game.start === 'function') game.start(currentLevelIndex);
-    // A dica contextual da fase é exibida assim que ela começa.
-    if (window.Contagio.Levels && typeof window.Contagio.Levels.get === 'function') {
-      var selectedLevel = window.Contagio.Levels.get(currentLevelIndex);
-      if (selectedLevel && selectedLevel.tips) toast(selectedLevel.tips, true);
-    }
     var menu = elements.menuOverlay;
     if (menu) { menu.classList.remove('is-visible'); menu.hidden = true; }
     var resultOverlay = elements.levelOverlay;
     if (resultOverlay) { resultOverlay.classList.remove('is-visible'); resultOverlay.hidden = true; }
-    var latest = resolveWorld();
-    if (latest) UI.update(latest, {});
+    // Game.start já atualiza a HUD e desenha o mundo inicial. Evita uma
+    // segunda atualização/renderização redundante no mesmo clique.
   }
 
   function updateActionButtons(target) {
@@ -374,18 +376,23 @@
     if (extra && extra.message) summary = extra.message + ' ' + summary;
     setText('level-result-message', summary);
     var next = elements.nextLevel;
-    if (next) next.hidden = !won;
+    var hasNextLevel = window.Contagio.Levels &&
+      typeof window.Contagio.Levels.list === 'function' &&
+      currentLevelIndex < window.Contagio.Levels.list().length - 1;
+    if (next) next.hidden = !won || !hasNextLevel;
     var retry = elements.retry;
     if (retry) retry.hidden = false;
   }
 
   function bindEvents() {
+    if (eventsBound) return;
+    eventsBound = true;
     if (elements.start) elements.start.addEventListener('click', function () { startGame(0); });
     if (elements.nextDay) elements.nextDay.addEventListener('click', nextDay);
     if (elements.playPause) elements.playPause.addEventListener('click', function () { togglePlay(); });
     if (elements.speed) elements.speed.addEventListener('change', function () {
       speed = Number(elements.speed.value) || 1;
-      if (playTimer) togglePlay(true);
+      if (game && typeof game.setSpeed === 'function') game.setSpeed(speed);
     });
 
     if (elements.lockdown) elements.lockdown.addEventListener('click', function () {
@@ -434,8 +441,10 @@
     if (elements.retry) elements.retry.addEventListener('click', function () { startGame(currentLevelIndex); });
     if (elements.nextLevel) elements.nextLevel.addEventListener('click', function () { startGame(currentLevelIndex + 1); });
     if (elements.continue) elements.continue.addEventListener('click', function () {
-      if (elements.levelOverlay) { elements.levelOverlay.classList.remove('is-visible'); elements.levelOverlay.hidden = true; }
-      if (game && typeof game.nextLevel === 'function') game.nextLevel();
+      if (elements.levelOverlay) {
+        elements.levelOverlay.classList.remove('is-visible');
+        elements.levelOverlay.hidden = true;
+      }
     });
 
     document.addEventListener('keydown', function (event) {
@@ -525,7 +534,7 @@
     drawChart(world, counts);
     renderOptions.tracedPeople = world.tracedPeople ||
       (world.actionState && world.actionState.tracedPeople) || [];
-    if (window.Contagio.Renderer) window.Contagio.Renderer.draw(world, renderOptions);
+    if (!extra.skipRender && window.Contagio.Renderer) window.Contagio.Renderer.draw(world, renderOptions);
 
     var status = extra.status || extra.result || extra.outcome;
     if (status === 'won' || status === 'lost' || status === 'victory' || status === 'defeat') {
@@ -536,7 +545,7 @@
 
   UI.toast = toast;
   UI.pause = function () { togglePlay(false); };
-  UI.isPlaying = function () { return Boolean(playTimer); };
+  UI.isPlaying = function () { return Boolean(game && game.isPlaying && game.isPlaying()); };
 
   window.Contagio.UI = UI;
 }());

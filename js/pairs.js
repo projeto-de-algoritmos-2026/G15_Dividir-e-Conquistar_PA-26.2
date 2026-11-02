@@ -14,7 +14,7 @@
       throw new TypeError('people deve ser um array.');
     }
 
-    if (typeof radius !== 'number' || Number.isNaN(radius)) {
+    if (typeof radius !== 'number' || !Number.isFinite(radius)) {
       throw new TypeError('O raio r deve ser um número válido.');
     }
     if (radius < 0) {
@@ -23,7 +23,7 @@
 
     for (var index = 0; index < people.length; index += 1) {
       var person = people[index];
-      if (!person || typeof person.x !== 'number' || typeof person.y !== 'number') {
+      if (!person || !Number.isFinite(person.x) || !Number.isFinite(person.y)) {
         throw new TypeError('Cada pessoa deve possuir coordenadas x e y numéricas.');
       }
     }
@@ -58,7 +58,7 @@
   function compareByX(a, b) {
     if (a.person.x !== b.person.x) return a.person.x - b.person.x;
     if (a.person.y !== b.person.y) return a.person.y - b.person.y;
-    return a.xIndex - b.xIndex;
+    return a.originalIndex - b.originalIndex;
   }
 
   // Compara registros pela coordenada y e usa x/índice para desempatar.
@@ -173,18 +173,29 @@
       // O índice do meio define a divisão estável por posição no array xSorted.
       var mid = Math.floor((lo + hi) / 2);
 
-      // O elemento mediano superior é o primeiro elemento da metade direita.
-      // Portanto, sua coordenada x representa a linha que separa os dois intervalos.
-      // Em caso de x repetido, os registros continuam separados pelo índice xIndex.
+      // A mediana das medianas fornece o pivô da faixa. A linha visual do
+      // corte, porém, precisa ficar ENTRE os x dos dois lados: usar o x do
+      // primeiro elemento direito com a regra x <= cutX deslocaria esse ponto
+      // para o distrito esquerdo.
       var xRange = xSorted.slice(lo, hi);
       var medianRecord = Selection.median(xRange, function (record) {
         return record.person.x;
       });
-      var cutX = medianRecord.person.x;
+      var medianX = medianRecord.person.x;
+      var leftMaxX = xSorted[mid - 1].person.x;
+      var rightMinX = xSorted[mid].person.x;
+      var hasSpatialSplit = leftMaxX < rightMinX;
+      var cutX = null;
 
-      if (node) {
-        node.cutX = cutX;
+      if (hasSpatialSplit) {
+        cutX = leftMaxX + (rightMinX - leftMaxX) / 2;
+        // Em números de ponto flutuante muito próximos, o ponto médio pode
+        // arredondar para o limite direito. O limite esquerdo continua sendo
+        // um corte correto para a convenção x <= cutX.
+        if (!(cutX < rightMinX)) cutX = leftMaxX;
       }
+
+      if (node) node.cutX = cutX;
 
       // Divide a sequência ordenada por y sem executar uma nova ordenação.
       var leftY = [];
@@ -199,8 +210,10 @@
       }
 
       // Conquista: resolve cada lado de forma independente.
-      // A árvore só é guardada até o limite configurado; a recursão continua completa.
-      var keepChildren = storeNode && depth < treeMaxDepth;
+      // A árvore espacial só registra filhos quando existe um corte vertical
+      // representável. Se os x dos dois lados forem iguais, a divisão interna
+      // ainda é usada pelo algoritmo, mas não pode virar distritos por x.
+      var keepChildren = storeNode && depth < treeMaxDepth && hasSpatialSplit;
       var leftResult = solve(lo, mid, depth + 1, leftY, keepChildren);
       var rightResult = solve(mid, hi, depth + 1, rightY, keepChildren);
 
@@ -213,7 +226,7 @@
       var strip = [];
       for (var stripIndex = 0; stripIndex < currentYSorted.length; stripIndex += 1) {
         var candidate = currentYSorted[stripIndex];
-        if (Math.abs(candidate.person.x - cutX) < radius) {
+        if (Math.abs(candidate.person.x - (hasSpatialSplit ? cutX : medianX)) < radius) {
           strip.push(candidate);
         }
       }
