@@ -3,19 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b1020">
+  <meta name="theme-color" content="#f2efe7">
   <meta name="description" content="Entenda e execute visualmente o algoritmo do par de pontos mais próximo usando dividir e conquistar.">
   <title>Seja o Algoritmo — Par de pontos mais próximo</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <script defer src="js/site.js"></script>
 </head>
 <body>
   <div class="site-shell">
     <header class="topbar">
-      <a class="brand" href="index.html" aria-label="Seja o Algoritmo, início"><span class="brand-mark" aria-hidden="true"><span class="brand-letter">S</span><span class="brand-dot">·</span><span class="brand-letter">A</span></span><span>SEJA O ALGORITMO</span></a>
+      <a class="brand" href="index.html" aria-label="Seja o Algoritmo, início"><span class="brand-mark" aria-hidden="true"><span class="brand-letter">S</span><span class="brand-dot">·</span><span class="brand-letter">A</span></span><span>Seja o Algoritmo</span></a>
       <nav class="main-nav" aria-label="Navegação principal">
         <a class="active" href="index.html">O algoritmo</a>
         <a class="nav-cta" href="laboratorio.html">Abrir laboratório <span>↗</span></a>
@@ -25,7 +22,7 @@
     <main>
       <section class="hero">
         <div class="hero-copy">
-          <div class="eyebrow"><span class="eyebrow-dot"></span> ALGORITMOS · DIVIDIR E CONQUISTAR</div>
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Algoritmos · dividir e conquistar</div>
           <h1>O par de pontos mais próximo<br><em>passo a passo.</em></h1>
           <p class="hero-lead">Aqui você entende como dividir e conquistar encontra os dois pontos mais próximos. Depois, no laboratório, pode acompanhar o algoritmo em funcionamento.</p>
           <div class="hero-actions">
@@ -36,17 +33,17 @@
         </div>
         <div class="hero-art" aria-label="Ilustração da divisão dos pontos e da faixa central">
           <div class="art-glow"></div>
-          <div class="art-label art-label-top">PLANO DE PONTOS <span>DIVIDIR → COMBINAR</span></div>
+          <div class="art-label art-label-top">Plano de pontos <span>dividir → combinar</span></div>
           <svg class="hero-graph" viewBox="0 0 560 390" role="img" aria-label="Pontos separados em duas metades por um corte vertical; dois pontos próximos atravessam o corte">
-            <defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#34405b" stroke-width="1" opacity=".55"/></pattern><linearGradient id="stripGlow" x1="0" x2="1"><stop stop-color="#6a7cff" stop-opacity=".08"/><stop offset=".5" stop-color="#6a7cff" stop-opacity=".3"/><stop offset="1" stop-color="#6a7cff" stop-opacity=".08"/></linearGradient></defs>
-            <rect x="18" y="18" width="524" height="350" rx="16" fill="url(#grid)" stroke="#34405b"/>
+            <defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#ded9cd" stroke-width="1" opacity=".55"/></pattern><linearGradient id="stripGlow" x1="0" x2="1"><stop stop-color="#b9684c" stop-opacity=".08"/><stop offset=".5" stop-color="#b9684c" stop-opacity=".3"/><stop offset="1" stop-color="#b9684c" stop-opacity=".08"/></linearGradient></defs>
+            <rect x="18" y="18" width="524" height="350" rx="16" fill="url(#grid)" stroke="#ded9cd"/>
             <rect x="255" y="18" width="112" height="350" fill="url(#stripGlow)"/>
-            <path d="M311 18V368" stroke="#aab4ff" stroke-width="2" stroke-dasharray="7 7"/>
-            <g fill="#62d5bd"><circle cx="72" cy="78" r="6"/><circle cx="124" cy="154" r="6"/><circle cx="175" cy="95" r="6"/><circle cx="205" cy="280" r="6"/><circle cx="95" cy="320" r="6"/><circle cx="245" cy="215" r="6"/></g>
-            <g fill="#ffbd69"><circle cx="390" cy="72" r="6"/><circle cx="430" cy="180" r="6"/><circle cx="478" cy="110" r="6"/><circle cx="395" cy="290" r="6"/><circle cx="480" cy="310" r="6"/><circle cx="350" cy="230" r="6"/></g>
-            <path d="M245 215L350 230" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="245" cy="215" r="10" fill="none" stroke="#fff" opacity=".65"/><circle cx="350" cy="230" r="10" fill="none" stroke="#fff" opacity=".65"/>
-            <rect x="279" y="30" width="65" height="25" rx="12" fill="#6a7cff"/><text x="311" y="47" text-anchor="middle" fill="white" font-size="10" font-family="DM Mono">CORTE</text>
-            <path d="M18 368H542" stroke="#596781"/><path d="M18 18V368" stroke="#596781"/>
+            <path d="M311 18V368" stroke="#3d6655" stroke-width="2" stroke-dasharray="7 7"/>
+            <g fill="#548775"><circle cx="72" cy="78" r="6"/><circle cx="124" cy="154" r="6"/><circle cx="175" cy="95" r="6"/><circle cx="205" cy="280" r="6"/><circle cx="95" cy="320" r="6"/><circle cx="245" cy="215" r="6"/></g>
+            <g fill="#c58b45"><circle cx="390" cy="72" r="6"/><circle cx="430" cy="180" r="6"/><circle cx="478" cy="110" r="6"/><circle cx="395" cy="290" r="6"/><circle cx="480" cy="310" r="6"/><circle cx="350" cy="230" r="6"/></g>
+            <path d="M245 215L350 230" stroke="#b9684c" stroke-width="2.5" stroke-linecap="round"/><circle cx="245" cy="215" r="10" fill="none" stroke="#b9684c" opacity=".65"/><circle cx="350" cy="230" r="10" fill="none" stroke="#b9684c" opacity=".65"/>
+            <rect x="279" y="30" width="65" height="25" rx="12" fill="#b9684c"/><text x="311" y="47" text-anchor="middle" fill="white" font-size="10" font-family="DM Mono">CORTE</text>
+            <path d="M18 368H542" stroke="#d0c9bc"/><path d="M18 18V368" stroke="#d0c9bc"/>
           </svg>
           <div class="art-label art-label-bottom"><span><i class="legend-dot mint"></i> Metade esquerda</span><span><i class="legend-dot amber"></i> Metade direita</span></div>
           <div class="floating-note"><span class="note-spark">✦</span><div><b>A estratégia</b><small>Dividir o conjunto e juntar as melhores respostas.</small></div></div>
@@ -54,7 +51,7 @@
       </section>
 
       <section class="section-intro" id="como-funciona">
-        <div><div class="eyebrow">COMO FUNCIONA</div><h2>O algoritmo em quatro etapas</h2></div>
+        <div><div class="eyebrow">Como funciona</div><h2>O algoritmo em quatro etapas</h2></div>
         <p>Separar os pontos em duas partes, resolver cada uma e conferir os pares que ficam perto da linha de divisão.</p>
       </section>
 
@@ -67,18 +64,18 @@
 
       <section class="method-strip">
         <div class="method-formula"><span class="formula-label">DISTÂNCIA EUCLIDIANA</span><strong>d(p,q) = √((xₚ − xq)² + (yₚ − yq)²)</strong><small>É a distância em linha reta entre dois pontos.</small></div>
-        <div class="method-note"><div class="eyebrow">O DETALHE QUE FAZ DIFERENÇA</div><p>Na faixa ordenada por y, basta examinar no máximo os <b>sete pontos seguintes</b> de cada ponto. Essa propriedade geométrica mantém a combinação eficiente.</p></div>
+        <div class="method-note"><div class="eyebrow">Um detalhe importante</div><p>Na faixa ordenada por y, basta examinar no máximo os <b>sete pontos seguintes</b> de cada ponto. Essa propriedade geométrica mantém a combinação eficiente.</p></div>
       </section>
 
       <section class="feature-band" id="complexidade">
-        <div class="feature-copy"><div class="eyebrow">COMO COMPARAR OS MÉTODOS</div><h2>Encontrar a mesma resposta de outro jeito.</h2><p>Força bruta é o nome dado ao método mais direto: medir a distância de todos os pares possíveis. Com <b>n</b> pontos, isso significa n(n − 1) / 2 medições. Dividir e conquistar evita boa parte desse trabalho.</p><a class="text-link" href="laboratorio.html">Compare os dois no laboratório <span>→</span></a></div>
+        <div class="feature-copy"><div class="eyebrow">Comparando os métodos</div><h2>Encontrar a mesma resposta de outro jeito.</h2><p>Força bruta é o nome dado ao método mais direto: medir a distância de todos os pares possíveis. Com <b>n</b> pontos, isso significa n(n − 1) / 2 medições. Dividir e conquistar evita boa parte desse trabalho.</p><a class="text-link" href="laboratorio.html">Compare os dois no laboratório <span>→</span></a></div>
         <div class="feature-stats"><div><strong>O(n log n)</strong><span>Dividir e conquistar</span></div><div><strong>O(n²)</strong><span>Testar todos os pares</span></div><div><strong>Mesmo mínimo</strong><span>Resultado conferido</span></div></div>
       </section>
 
       <section class="final-cta"><div><div class="eyebrow">PARTE PRÁTICA</div><h2>Agora acompanhe uma execução.</h2><p>Escolha um cenário e veja como cada etapa muda o plano de pontos.</p></div><a class="button button-primary" href="laboratorio.html">Ir para o laboratório <span>→</span></a></section>
     </main>
 
-    <footer class="footer"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><span class="brand-letter">S</span><span class="brand-dot">·</span><span class="brand-letter">A</span></span><span>SEJA O ALGORITMO</span></a><span>Material de apoio para estudar algoritmos.</span><a href="#como-funciona">Ver etapas ↑</a></footer>
+    <footer class="footer"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><span class="brand-letter">S</span><span class="brand-dot">·</span><span class="brand-letter">A</span></span><span>Seja o Algoritmo</span></a><span>Material de apoio para estudar algoritmos.</span><a href="#como-funciona">Ver etapas ↑</a></footer>
   </div>
 </body>
 </html>

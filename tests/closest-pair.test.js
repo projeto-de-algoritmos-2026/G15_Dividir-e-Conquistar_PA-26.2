@@ -1,4 +1,3 @@
-/* Execute com: node tests/closest-pair.test.js */
 const fs = require('fs');
 const vm = require('vm');
 const path = require('path');

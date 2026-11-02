@@ -1,5 +1,3 @@
-/* Algoritmo exato: par de pontos mais próximo por dividir e conquistar.
-   Além do resultado, produz uma trilha de eventos para a visualização didática. */
 (function (global) {
   'use strict';
 
@@ -132,7 +130,6 @@
       node.left = recurse(leftX, leftY, path ? path + ' · E' : 'Esquerda', depth + 1);
       node.right = recurse(rightX, rightY, path ? path + ' · D' : 'Direita', depth + 1);
 
-      // δ é a melhor distância já encontrada dentro de cada metade.
       var delta = Math.min(node.left.best.distance, node.right.best.distance);
       var strip = ySorted.filter(function (p) {
         return Math.abs(p.x - cutX) <= delta;
@@ -153,8 +150,6 @@
         : node.right.best;
       var leftSet = leftIds;
 
-      // Pela propriedade geométrica da faixa, cada ponto precisa ser
-      // comparado com no máximo os sete seguintes na ordenação por y.
       for (var a = 0; a < strip.length; a += 1) {
         for (var b = a + 1; b < strip.length && b <= a + 7; b += 1) {
           if (strip[b].y - strip[a].y > delta) break;

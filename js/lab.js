@@ -97,15 +97,15 @@
     var measured = Number.isFinite(event.distance) ? event.distance : (Number.isFinite(event.bestDistance) ? event.bestDistance : null);
     var d = measured == null ? '—' : measured.toFixed(1);
     switch (event.type) {
-      case 'intro': return { label: 'PREPARAÇÃO', icon: '✦', title: 'Vamos encontrar o par mais próximo.', description: 'O conjunto tem ' + event.totalPoints + ' pontos. Em vez de medir todas as combinações, vamos dividir o problema em partes menores.', detail: 'No final, vamos conferir a resposta calculando também a distância de todos os pares possíveis.' };
-      case 'divide': return { label: 'DIVIDIR', icon: '⌁', title: 'Separar em duas metades.', description: 'Este subproblema contém ' + n + ' pontos. A linha vertical passa entre os dois pontos centrais da ordenação por x.', detail: 'Metade esquerda: ' + event.leftCount + ' pontos. Metade direita: ' + event.rightCount + '. Cada lado será resolvido independentemente.' };
-      case 'base-start': return { label: 'CASO BASE', icon: '▦', title: 'O problema ficou pequeno.', description: 'Com ' + event.pointCount + ' ponto(s), não precisamos dividir mais. Basta comparar todos os pares disponíveis neste pequeno conjunto.', detail: 'Número de pares neste caso-base: ' + event.totalPairs + '.' };
-      case 'base-compare': return { label: 'COMPARAÇÃO', icon: '↔', title: 'Medindo um par de pontos.', description: 'A distância entre este par é ' + d + ' unidades.' + (event.improved ? ' É a menor encontrada até agora neste subproblema.' : ' O melhor par atual continua sendo mais próximo.'), detail: 'A distância euclidiana considera a diferença horizontal e vertical entre os pontos.' };
-      case 'base-done': return { label: 'CASO BASE RESOLVIDO', icon: '✓', title: 'A melhor resposta desta parte foi guardada.', description: 'Este subproblema devolve a menor distância encontrada: ' + d + ' unidades.', detail: 'Ao retornar da recursão, essa resposta será comparada com a da outra metade.' };
-      case 'strip': return { label: 'COMBINAR · FAIXA', icon: '▥', title: 'Investigar a faixa ao redor do corte.', description: 'A melhor distância entre os lados é δ = ' + Number(event.delta).toFixed(1) + '. Um par que atravessa o corte só pode melhorar esse valor se estiver dentro da faixa sombreada.', detail: 'Foram selecionados ' + event.stripIds.length + ' ponto(s). Na ordenação por y, cada ponto precisa examinar no máximo os sete seguintes.' };
-      case 'strip-compare': return { label: 'COMPARAÇÃO NA FAIXA', icon: '⇄', title: 'Verificar um possível par cruzado.', description: 'A distância deste par é ' + d + ' unidades. ' + (event.improved ? 'Encontramos uma distância menor: a resposta melhorou!' : 'Esse par não supera a melhor distância conhecida.'), detail: 'Só comparamos pontos de lados diferentes. Pares do mesmo lado já foram tratados na recursão.' };
-      case 'merge': return { label: 'COMBINAR', icon: '⌘', title: 'Unir as respostas dos dois lados.', description: 'A menor distância deste subproblema é ' + d + ' unidades. Ela pode vir da esquerda, da direita ou da faixa central.', detail: 'A resposta retorna para a chamada anterior, até chegar novamente à raiz.' };
-      case 'complete': return { label: 'CONCLUÍDO', icon: '✦', title: 'O par mais próximo foi encontrado.', description: 'O menor par está destacado no plano. A conferência pelo método que testa todos os pares ' + (event.verified ? 'encontrou a mesma distância.' : 'apontou uma diferença que precisa ser investigada.'), detail: 'Os dois métodos precisam chegar à mesma distância mínima; a diferença está na quantidade de pares que cada um mede.' };
+      case 'intro': return { label: 'Início', icon: '✦', title: 'Vamos encontrar o par mais próximo.', description: 'O conjunto tem ' + event.totalPoints + ' pontos. Em vez de medir todas as combinações, vamos dividir o problema em partes menores.', detail: 'No final, vamos conferir a resposta calculando também a distância de todos os pares possíveis.' };
+      case 'divide': return { label: 'Dividir', icon: '⌁', title: 'Separar em duas metades.', description: 'Este subproblema contém ' + n + ' pontos. A linha vertical passa entre os dois pontos centrais da ordenação por x.', detail: 'Metade esquerda: ' + event.leftCount + ' pontos. Metade direita: ' + event.rightCount + '. Cada lado será resolvido independentemente.' };
+      case 'base-start': return { label: 'Caso base', icon: '▦', title: 'O problema ficou pequeno.', description: 'Com ' + event.pointCount + ' ponto(s), não precisamos dividir mais. Basta comparar todos os pares disponíveis neste pequeno conjunto.', detail: 'Número de pares neste caso-base: ' + event.totalPairs + '.' };
+      case 'base-compare': return { label: 'Comparação', icon: '↔', title: 'Medindo um par de pontos.', description: 'A distância entre este par é ' + d + ' unidades.' + (event.improved ? ' É a menor encontrada até agora neste subproblema.' : ' O melhor par atual continua sendo mais próximo.'), detail: 'A distância euclidiana considera a diferença horizontal e vertical entre os pontos.' };
+      case 'base-done': return { label: 'Caso base resolvido', icon: '✓', title: 'A melhor resposta desta parte foi guardada.', description: 'Este subproblema devolve a menor distância encontrada: ' + d + ' unidades.', detail: 'Ao retornar da recursão, essa resposta será comparada com a da outra metade.' };
+      case 'strip': return { label: 'Faixa central', icon: '▥', title: 'Investigar a faixa ao redor do corte.', description: 'A melhor distância entre os lados é δ = ' + Number(event.delta).toFixed(1) + '. Um par que atravessa o corte só pode melhorar esse valor se estiver dentro da faixa sombreada.', detail: 'Foram selecionados ' + event.stripIds.length + ' ponto(s). Na ordenação por y, cada ponto precisa examinar no máximo os sete seguintes.' };
+      case 'strip-compare': return { label: 'Comparação na faixa', icon: '⇄', title: 'Verificar um possível par cruzado.', description: 'A distância deste par é ' + d + ' unidades. ' + (event.improved ? 'Encontramos uma distância menor: a resposta melhorou!' : 'Esse par não supera a melhor distância conhecida.'), detail: 'Só comparamos pontos de lados diferentes. Pares do mesmo lado já foram tratados na recursão.' };
+      case 'merge': return { label: 'Combinar', icon: '⌘', title: 'Unir as respostas dos dois lados.', description: 'A menor distância deste subproblema é ' + d + ' unidades. Ela pode vir da esquerda, da direita ou da faixa central.', detail: 'A resposta retorna para a chamada anterior, até chegar novamente à raiz.' };
+      case 'complete': return { label: 'Concluído', icon: '✦', title: 'O par mais próximo foi encontrado.', description: 'O menor par está destacado no plano. A conferência pelo método que testa todos os pares ' + (event.verified ? 'encontrou a mesma distância.' : 'apontou uma diferença que precisa ser investigada.'), detail: 'Os dois métodos precisam chegar à mesma distância mínima; a diferença está na quantidade de pares que cada um mede.' };
       default: return { label: 'ETAPA', icon: '·', title: 'Executando algoritmo.', description: '', detail: '' };
     }
   }
@@ -115,7 +115,6 @@
       window.clearInterval(state.timer);
       state.timer = null;
     }
-    // Também é chamado durante a inicialização, antes de existir uma execução.
     updatePlayButton();
   }
 
@@ -125,7 +124,7 @@
     var hasRun = !!state.run;
     elements.playIcon.textContent = playing ? 'Ⅱ' : '▶';
     elements.playText.textContent = playing ? 'Pausar' : 'Animar execução';
-    elements.runState.textContent = playing ? 'EXECUTANDO' : (hasRun && state.index >= state.run.events.length - 1 ? 'CONCLUÍDO' : 'PRONTO');
+    elements.runState.textContent = playing ? 'Em andamento' : (hasRun && state.index >= state.run.events.length - 1 ? 'Concluído' : 'Pronto');
     if (elements.runState.parentElement && elements.runState.parentElement.classList) {
       elements.runState.parentElement.classList.toggle('running', playing);
       elements.runState.parentElement.classList.toggle('done', !playing && hasRun && state.index >= state.run.events.length - 1);
@@ -167,34 +166,34 @@
     var maxX = Math.max.apply(null, (node ? node.points : points).map(function (p) { return p.x; }));
     var rangeWidth = Math.max(1, maxX - minX);
     if (node) {
-      layer.push(svgElement('rect', { x: Math.max(0, minX - 22), y: 0, width: Math.min(WIDTH, rangeWidth + 44), height: HEIGHT, fill: 'rgba(130,140,255,.045)' }, ''));
+      layer.push(svgElement('rect', { x: Math.max(0, minX - 22), y: 0, width: Math.min(WIDTH, rangeWidth + 44), height: HEIGHT, fill: 'rgba(61,102,85,.055)' }, ''));
     }
 
     if (event && Number.isFinite(event.cutX) && (event.type === 'divide' || event.type === 'strip' || event.type === 'strip-compare' || event.type === 'merge')) {
       if (event.type === 'strip' || event.type === 'strip-compare') {
         var delta = Number(event.delta) || 0;
-        layer.push(svgElement('rect', { x: event.cutX - delta, y: 0, width: Math.max(0, delta * 2), height: HEIGHT, fill: 'rgba(141,139,255,.15)' }, ''));
+        layer.push(svgElement('rect', { x: event.cutX - delta, y: 0, width: Math.max(0, delta * 2), height: HEIGHT, fill: 'rgba(185,104,76,.13)' }, ''));
       } else if (event.type === 'merge' && node && node.left && node.right) {
         var mergeDelta = Math.min(node.left.best.distance, node.right.best.distance);
-        layer.push(svgElement('rect', { x: event.cutX - mergeDelta, y: 0, width: mergeDelta * 2, height: HEIGHT, fill: 'rgba(141,139,255,.1)' }, ''));
+        layer.push(svgElement('rect', { x: event.cutX - mergeDelta, y: 0, width: mergeDelta * 2, height: HEIGHT, fill: 'rgba(185,104,76,.08)' }, ''));
       }
-      layer.push(svgElement('line', { x1: event.cutX, y1: 0, x2: event.cutX, y2: HEIGHT, stroke: '#a19fff', 'stroke-width': 2, 'stroke-dasharray': '8 7', opacity: .9 }, ''));
-      layer.push(svgElement('rect', { x: event.cutX - 29, y: 9, width: 58, height: 22, rx: 8, fill: '#5658a9' }, ''));
-      layer.push(svgElement('text', { x: event.cutX, y: 24, 'text-anchor': 'middle', fill: '#fff', 'font-size': 10, 'font-family': 'DM Mono' }, 'CORTE'));
+      layer.push(svgElement('line', { x1: event.cutX, y1: 0, x2: event.cutX, y2: HEIGHT, stroke: '#b9684c', 'stroke-width': 2, 'stroke-dasharray': '8 7', opacity: .9 }, ''));
+      layer.push(svgElement('rect', { x: event.cutX - 29, y: 9, width: 58, height: 22, rx: 8, fill: '#3d6655' }, ''));
+      layer.push(svgElement('text', { x: event.cutX, y: 24, 'text-anchor': 'middle', fill: '#fff', 'font-size': 10, 'font-family': 'monospace' }, 'Corte'));
     }
 
     if (event && event.type === 'base-start') {
-      layer.push(svgElement('rect', { x: Math.max(0, minX - 30), y: 0, width: rangeWidth + 60, height: HEIGHT, rx: 4, fill: 'rgba(102,216,189,.07)', stroke: '#66d8bd', 'stroke-width': 1, 'stroke-dasharray': '4 5' }, ''));
+      layer.push(svgElement('rect', { x: Math.max(0, minX - 30), y: 0, width: rangeWidth + 60, height: HEIGHT, rx: 4, fill: 'rgba(84,135,117,.08)', stroke: '#548775', 'stroke-width': 1, 'stroke-dasharray': '4 5' }, ''));
     }
 
     points.forEach(function (point) {
       var active = activeIds.has(point.id);
-      var sideColor = leftIds.has(point.id) ? '#66d8bd' : rightIds.has(point.id) ? '#ffc477' : '#8795b2';
-      var color = pairIds.has(point.id) || finalIds.has(point.id) ? '#b5a7ff' : (stripIds.has(point.id) ? '#c2bfff' : sideColor);
+      var sideColor = leftIds.has(point.id) ? '#548775' : rightIds.has(point.id) ? '#c58b45' : '#96978e';
+      var color = pairIds.has(point.id) || finalIds.has(point.id) ? '#b9684c' : (stripIds.has(point.id) ? '#a87d58' : sideColor);
       var opacity = active || event && event.type === 'complete' ? 1 : .26;
-      layer.push(svgElement('circle', { cx: point.x, cy: point.y, r: pairIds.has(point.id) || finalIds.has(point.id) ? 10 : 7, fill: color, opacity: opacity, stroke: pairIds.has(point.id) || finalIds.has(point.id) ? '#fff' : '#0e182b', 'stroke-width': pairIds.has(point.id) || finalIds.has(point.id) ? 2 : 1.5 }, ''));
+      layer.push(svgElement('circle', { cx: point.x, cy: point.y, r: pairIds.has(point.id) || finalIds.has(point.id) ? 10 : 7, fill: color, opacity: opacity, stroke: '#fffefa', 'stroke-width': pairIds.has(point.id) || finalIds.has(point.id) ? 2 : 1.5 }, ''));
       if (active || event && event.type === 'complete') {
-        layer.push(svgElement('text', { x: point.x, y: point.y - 12, 'text-anchor': 'middle', fill: '#c9d2e7', 'font-size': 10, 'font-family': 'DM Mono', opacity: .85 }, 'P' + point.id));
+        layer.push(svgElement('text', { x: point.x, y: point.y - 12, 'text-anchor': 'middle', fill: '#59645d', 'font-size': 10, 'font-family': 'monospace', opacity: .85 }, 'P' + point.id));
       }
     });
 
@@ -203,12 +202,12 @@
       var p1 = points.find(function (p) { return String(p.id) === String(pair[0]); });
       var p2 = points.find(function (p) { return String(p.id) === String(pair[1]); });
       if (p1 && p2) {
-        layer.push(svgElement('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: '#e7e5ff', 'stroke-width': event.type === 'complete' ? 4 : 2.5, 'stroke-linecap': 'round', 'stroke-dasharray': event.type === 'complete' ? 'none' : '5 4' }, ''));
+        layer.push(svgElement('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: '#a85e46', 'stroke-width': event.type === 'complete' ? 4 : 2.5, 'stroke-linecap': 'round', 'stroke-dasharray': event.type === 'complete' ? 'none' : '5 4' }, ''));
         if (event.type === 'complete') {
           var middleX = (p1.x + p2.x) / 2;
           var middleY = (p1.y + p2.y) / 2;
-          layer.push(svgElement('rect', { x: middleX - 38, y: middleY - 28, width: 76, height: 20, rx: 7, fill: '#4c4e9d' }, ''));
-          layer.push(svgElement('text', { x: middleX, y: middleY - 14, 'text-anchor': 'middle', fill: '#fff', 'font-size': 10, 'font-family': 'DM Mono' }, event.bestDistance.toFixed(1)));
+          layer.push(svgElement('rect', { x: middleX - 38, y: middleY - 28, width: 76, height: 20, rx: 7, fill: '#3d6655' }, ''));
+          layer.push(svgElement('text', { x: middleX, y: middleY - 14, 'text-anchor': 'middle', fill: '#fff', 'font-size': 10, 'font-family': 'monospace' }, event.bestDistance.toFixed(1)));
         }
       }
     }
