@@ -222,6 +222,11 @@
     showSelectionHint(false);
     togglePlay(false);
     if (game && typeof game.start === 'function') game.start(currentLevelIndex);
+    // A dica contextual da fase é exibida assim que ela começa.
+    if (window.Contagio.Levels && typeof window.Contagio.Levels.get === 'function') {
+      var selectedLevel = window.Contagio.Levels.get(currentLevelIndex);
+      if (selectedLevel && selectedLevel.tips) toast(selectedLevel.tips, true);
+    }
     var menu = elements.menuOverlay;
     if (menu) { menu.classList.remove('is-visible'); menu.hidden = true; }
     var resultOverlay = elements.levelOverlay;
