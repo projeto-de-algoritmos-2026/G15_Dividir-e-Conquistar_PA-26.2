@@ -1,280 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b1220">
-  <meta name="description" content="Contágio — simulação estratégica de epidemias em uma cidade.">
-  <title>Contágio — Simulador de epidemias</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="Entenda e execute visualmente o algoritmo do par de pontos mais próximo usando dividir e conquistar.">
+  <title>Seja o Algoritmo — Par de pontos mais próximo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="js/site.js"></script>
 </head>
 <body>
-  <div class="app-shell">
+  <div class="site-shell">
     <header class="topbar">
-      <a class="brand" href="#" aria-label="Contágio — início">
-        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span class="brand-copy">
-          <strong>Contágio</strong>
-          <small>SIMULADOR DE EPIDEMIAS</small>
-        </span>
-      </a>
-      <div class="topbar-center">
-        <span class="eyebrow">SIMULAÇÃO EM ANDAMENTO</span>
-        <div class="day-display">DIA <strong id="current-day">01</strong></div>
-      </div>
-      <div class="topbar-right">
-        <span class="status-dot"></span>
-        <span>MODELO LOCAL</span>
-      </div>
+      <a class="brand" href="index.html" aria-label="Seja o Algoritmo, início"><span class="brand-mark">S<span>·</span>A</span><span>SEJA O ALGORITMO</span></a>
+      <nav class="main-nav" aria-label="Navegação principal">
+        <a class="active" href="index.html">O algoritmo</a>
+        <a class="nav-cta" href="laboratorio.html">Abrir laboratório <span>↗</span></a>
+      </nav>
     </header>
 
-    <main class="main-layout">
-      <section class="city-section" aria-label="Mapa da cidade">
-        <div class="section-heading city-heading">
-          <div>
-            <span class="eyebrow">VISÃO GERAL</span>
-            <h1>Mapa da cidade</h1>
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> ALGORITMOS · DIVIDIR E CONQUISTAR</div>
+          <h1>Não apenas leia o algoritmo.<br><em>Seja o algoritmo.</em></h1>
+          <p class="hero-lead">Encontre os dois pontos mais próximos em um plano. Entenda a estratégia e acompanhe cada decisão do algoritmo, do primeiro corte até a resposta final.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="laboratorio.html">Executar o algoritmo <span>→</span></a>
+            <a class="button button-quiet" href="#como-funciona">Ver as etapas</a>
           </div>
-          <div class="map-legend" aria-label="Legenda dos estados">
-            <span><i class="legend-dot susceptible"></i>Suscetível</span>
-            <span><i class="legend-dot infected"></i>Infectado</span>
-            <span><i class="legend-dot recovered"></i>Recuperado</span>
-            <span><i class="legend-dot vaccinated"></i>Vacinado</span>
-          </div>
+          <div class="hero-proof"><span class="proof-icon">✦</span> Explicação direta · Animação passo a passo · Conferência com força bruta</div>
         </div>
-
-        <div class="city-frame">
-          <div class="map-topline">
-            <span><i class="live-indicator"></i> SIMULAÇÃO</span>
-            <span id="city-population">POPULAÇÃO: —</span>
-          </div>
-          <canvas id="city" width="1100" height="720" aria-label="Representação 2D da cidade e de seus habitantes">
-            Seu navegador não oferece suporte ao elemento canvas.
-          </canvas>
-          <div class="selection-hint" id="selection-hint" role="status" hidden>Clique em um distrito · ESC para cancelar</div>
-          <div class="map-coordinates" aria-hidden="true">
-            <span>SETOR URBANO · 01</span>
-            <span>CONTÁGIO / LAB</span>
-          </div>
-        </div>
-
-        <div class="city-footer">
-          <div class="footer-note">
-            <span class="footer-icon">⌖</span>
-            <span>Observe os deslocamentos e os focos de transmissão em tempo real.</span>
-          </div>
-          <span class="simulation-tag">2D · TEMPO DISCRETO</span>
+        <div class="hero-art" aria-label="Ilustração da divisão dos pontos e da faixa central">
+          <div class="art-glow"></div>
+          <div class="art-label art-label-top">PLANO DE PONTOS <span>DIVIDIR → COMBINAR</span></div>
+          <svg class="hero-graph" viewBox="0 0 560 390" role="img" aria-label="Pontos separados em duas metades por um corte vertical; dois pontos próximos atravessam o corte">
+            <defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#34405b" stroke-width="1" opacity=".55"/></pattern><linearGradient id="stripGlow" x1="0" x2="1"><stop stop-color="#6a7cff" stop-opacity=".08"/><stop offset=".5" stop-color="#6a7cff" stop-opacity=".3"/><stop offset="1" stop-color="#6a7cff" stop-opacity=".08"/></linearGradient></defs>
+            <rect x="18" y="18" width="524" height="350" rx="16" fill="url(#grid)" stroke="#34405b"/>
+            <rect x="255" y="18" width="112" height="350" fill="url(#stripGlow)"/>
+            <path d="M311 18V368" stroke="#aab4ff" stroke-width="2" stroke-dasharray="7 7"/>
+            <g fill="#62d5bd"><circle cx="72" cy="78" r="6"/><circle cx="124" cy="154" r="6"/><circle cx="175" cy="95" r="6"/><circle cx="205" cy="280" r="6"/><circle cx="95" cy="320" r="6"/><circle cx="245" cy="215" r="6"/></g>
+            <g fill="#ffbd69"><circle cx="390" cy="72" r="6"/><circle cx="430" cy="180" r="6"/><circle cx="478" cy="110" r="6"/><circle cx="395" cy="290" r="6"/><circle cx="480" cy="310" r="6"/><circle cx="350" cy="230" r="6"/></g>
+            <path d="M245 215L350 230" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="245" cy="215" r="10" fill="none" stroke="#fff" opacity=".65"/><circle cx="350" cy="230" r="10" fill="none" stroke="#fff" opacity=".65"/>
+            <rect x="279" y="30" width="65" height="25" rx="12" fill="#6a7cff"/><text x="311" y="47" text-anchor="middle" fill="white" font-size="10" font-family="DM Mono">CORTE</text>
+            <path d="M18 368H542" stroke="#596781"/><path d="M18 18V368" stroke="#596781"/>
+          </svg>
+          <div class="art-label art-label-bottom"><span><i class="legend-dot mint"></i> Metade esquerda</span><span><i class="legend-dot amber"></i> Metade direita</span></div>
+          <div class="floating-note"><span class="note-spark">✦</span><div><b>Uma ideia poderosa</b><small>Resolver partes menores e combinar as respostas.</small></div></div>
         </div>
       </section>
 
-      <aside class="sidebar" aria-label="Painel de controle">
-        <section class="panel stats-panel">
-          <div class="panel-heading">
-            <div>
-              <span class="eyebrow">CENÁRIO ATUAL</span>
-              <h2>Estatísticas</h2>
-            </div>
-            <span class="panel-icon" aria-hidden="true">▥</span>
-          </div>
-          <div class="stats-grid">
-            <article class="stat-card stat-s">
-              <span class="stat-label"><i class="legend-dot susceptible"></i> SUSCETÍVEIS</span>
-              <strong id="stat-susceptible">—</strong>
-              <small>Não infectados</small>
-              <div class="stat-progress"><span id="bar-susceptible"></span></div>
-            </article>
-            <article class="stat-card stat-i">
-              <span class="stat-label"><i class="legend-dot infected"></i> INFECTADOS</span>
-              <strong id="stat-infected">—</strong>
-              <small>Em circulação</small>
-              <div class="stat-progress"><span id="bar-infected"></span></div>
-            </article>
-            <article class="stat-card stat-r">
-              <span class="stat-label"><i class="legend-dot recovered"></i> RECUPERADOS</span>
-              <strong id="stat-recovered">—</strong>
-              <small>Imunidade adquirida</small>
-              <div class="stat-progress"><span id="bar-recovered"></span></div>
-            </article>
-            <article class="stat-card stat-v">
-              <span class="stat-label"><i class="legend-dot vaccinated"></i> VACINADOS</span>
-              <strong id="stat-vaccinated">—</strong>
-              <small>Proteção aplicada</small>
-              <div class="stat-progress"><span id="bar-vaccinated"></span></div>
-            </article>
-          </div>
-          <div class="budget-strip"><span>Orçamento disponível</span><strong id="budget-value">—</strong></div>
-          <div class="hospital-block">
-            <div class="hospital-heading">
-              <span>Ocupação hospitalar</span>
-              <strong id="hospital-occupancy">— / —</strong>
-            </div>
-            <div class="progress-track" role="progressbar" aria-label="Ocupação hospitalar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="hospital-progress">
-              <span id="hospital-progress-fill"></span>
-            </div>
-            <div class="progress-caption">
-              <span>Capacidade disponível</span>
-              <strong id="hospital-available">—</strong>
-            </div>
-          </div>
-        </section>
+      <section class="section-intro" id="como-funciona">
+        <div><div class="eyebrow">A ESTRATÉGIA</div><h2>Como o algoritmo pensa</h2></div>
+        <p>Ordenar, dividir, resolver e combinar. A etapa mais importante é não esquecer dos pares que podem atravessar a linha de divisão.</p>
+      </section>
 
-        <section class="panel actions-panel">
-          <div class="panel-heading">
-            <div>
-              <span class="eyebrow">INTERVENÇÕES</span>
-              <h2>Medidas</h2>
-            </div>
-            <span class="panel-icon" aria-hidden="true">✳</span>
-          </div>
-          <div class="action-list">
-            <button class="action-button" id="btn-lockdown" type="button" disabled aria-label="Selecionar distrito para lockdown">
-              <span class="action-symbol lockdown-symbol">⌑</span>
-              <span class="action-copy"><strong>Lockdown de distrito</strong><small>Restringir circulação em uma área</small></span>
-              <span class="action-arrow">›</span>
-            </button>
-            <button class="action-button" id="btn-distancing" type="button" disabled aria-label="Ativar ou desativar distanciamento">
-              <span class="action-symbol distancing-symbol">↔</span>
-              <span class="action-copy"><strong>Distanciamento</strong><small>Reduzir a proximidade entre pessoas</small></span>
-              <span class="action-arrow">›</span>
-            </button>
-            <button class="action-button" id="btn-vaccinate" type="button" disabled aria-label="Vacinar pessoas suscetíveis">
-              <span class="action-symbol vaccine-symbol">✚</span>
-              <span class="action-copy"><strong>Vacinar</strong><small>Imunizar parte da população</small></span>
-              <span class="action-arrow">›</span>
-            </button>
-            <button class="action-button" id="btn-trace" type="button" disabled aria-label="Rastrear contatos ou isolar contatos rastreados">
-              <span class="action-symbol trace-symbol">⌕</span>
-              <span class="action-copy"><strong>Rastrear contatos</strong><small>Identificar e isolar contatos recentes</small></span>
-              <span class="action-arrow">›</span>
-            </button>
-          </div>
-          <p class="panel-hint">As medidas estratégicas serão habilitadas ao iniciar uma fase.</p>
-        </section>
+      <section class="concept-grid algorithm-steps" aria-label="Etapas do algoritmo">
+        <article class="concept-card"><div class="concept-number">01</div><div class="concept-icon purple">⌘</div><h3>Ordenar e dividir</h3><p>Ordene por x e corte o conjunto em duas metades equilibradas. Cada metade vira um subproblema.</p><span class="concept-tag">MEDIANA DE X</span></article>
+        <article class="concept-card"><div class="concept-number">02</div><div class="concept-icon mint">↘</div><h3>Resolver os pequenos</h3><p>Continue dividindo. Quando restarem até três pontos, compare todos os pares e guarde o menor.</p><span class="concept-tag">CASO BASE</span></article>
+        <article class="concept-card"><div class="concept-number">03</div><div class="concept-icon amber">▥</div><h3>Examinar a faixa</h3><p>Use δ, a melhor distância dos dois lados, para limitar a busca perto do corte. Ordene essa faixa por y.</p><span class="concept-tag">FAIXA CENTRAL</span></article>
+        <article class="concept-card"><div class="concept-number">04</div><div class="concept-icon purple">⇄</div><h3>Combinar as respostas</h3><p>Compare apenas candidatos de lados diferentes. A melhor resposta é a menor entre esquerda, direita e faixa.</p><span class="concept-tag">RESPOSTA DO NÓ</span></article>
+      </section>
 
-        <section class="panel algorithm-panel">
-          <div class="panel-heading">
-            <div>
-              <span class="eyebrow">DIVIDIR E CONQUISTAR</span>
-              <h2>Algoritmo</h2>
-            </div>
-            <span class="complexity-chip">O(n log n + k)</span>
-          </div>
-          <div class="algorithm-metrics">
-            <div class="algorithm-metric">
-              <span>Comparações · D&amp;C</span>
-              <strong id="algorithm-comparisons">—</strong>
-            </div>
-            <div class="algorithm-metric">
-              <span>Força bruta</span>
-              <strong id="brute-comparisons">—</strong>
-            </div>
-            <div class="algorithm-metric">
-              <span>Profundidade da árvore</span>
-              <strong id="tree-depth">—</strong>
-            </div>
-            <div class="algorithm-metric">
-              <span>Razão força bruta / D&amp;C</span>
-              <strong id="comparison-ratio">—</strong>
-            </div>
-          </div>
-          <label class="toggle-row" for="toggle-districts">
-            <span class="toggle-copy"><strong>Mostrar divisão em distritos</strong><small>Exibir os cortes da recursão no mapa</small></span>
-            <input id="toggle-districts" type="checkbox" disabled aria-label="Mostrar divisão em distritos">
-            <span class="toggle-control" aria-hidden="true"></span>
-          </label>
-          <label class="toggle-row compact-toggle" for="toggle-strip">
-            <span class="toggle-copy"><strong>Mostrar faixa central</strong><small>Faixa de contatos entre regiões</small></span>
-            <input id="toggle-strip" type="checkbox" disabled aria-label="Mostrar faixa central de contato">
-            <span class="toggle-control" aria-hidden="true"></span>
-          </label>
-          <label class="toggle-row compact-toggle" for="toggle-pairs">
-            <span class="toggle-copy"><strong>Mostrar linhas de contato</strong><small>Pares com risco de transmissão</small></span>
-            <input id="toggle-pairs" type="checkbox" disabled aria-label="Mostrar linhas de contato com risco">
-            <span class="toggle-control" aria-hidden="true"></span>
-          </label>
-        </section>
+      <section class="method-strip">
+        <div class="method-formula"><span class="formula-label">DISTÂNCIA EUCLIDIANA</span><strong>d(p,q) = √((xₚ − xq)² + (yₚ − yq)²)</strong><small>É a distância em linha reta entre dois pontos.</small></div>
+        <div class="method-note"><div class="eyebrow">O DETALHE QUE FAZ DIFERENÇA</div><p>Na faixa ordenada por y, basta examinar no máximo os <b>sete pontos seguintes</b> de cada ponto. Essa propriedade geométrica mantém a combinação eficiente.</p></div>
+      </section>
 
-        <section class="panel chart-panel">
-          <div class="panel-heading">
-            <div><span class="eyebrow">EVOLUÇÃO DIÁRIA</span><h2>Curva epidemiológica</h2></div>
-          </div>
-          <div class="chart-legend"><span class="chart-s">S</span><span class="chart-i">I</span><span class="chart-r">R</span><span class="chart-v">V</span></div>
-          <canvas id="chart" height="140" aria-label="Gráfico da evolução diária de suscetíveis, infectados, recuperados e vacinados"></canvas>
-        </section>
+      <section class="feature-band" id="complexidade">
+        <div class="feature-copy"><div class="eyebrow">POR QUE DIVIDIR E CONQUISTAR?</div><h2>Menos comparações, mesma resposta.</h2><p>A força bruta compara todos os pares. Dividir e conquistar resolve subproblemas menores e examina uma faixa limitada em cada nível da recursão.</p><a class="text-link" href="laboratorio.html">Veja a diferença na prática <span>→</span></a></div>
+        <div class="feature-stats"><div><strong>O(n log n)</strong><span>Dividir e conquistar</span></div><div><strong>O(n²)</strong><span>Força bruta</span></div><div><strong>Mesmo mínimo</strong><span>Resultado conferido</span></div></div>
+      </section>
 
-        <section class="panel controls-panel">
-          <div class="panel-heading">
-            <div>
-              <span class="eyebrow">CONTROLE DO TEMPO</span>
-              <h2>Simulação</h2>
-            </div>
-            <span class="panel-icon" aria-hidden="true">◷</span>
-          </div>
-          <button class="primary-button" id="btn-next-day" type="button" disabled aria-label="Avançar um dia da simulação">
-            <span>Próximo dia</span><span class="button-shortcut">→</span>
-          </button>
-          <div class="playback-row">
-            <button class="secondary-button" id="btn-play-pause" type="button" disabled aria-label="Iniciar simulação automática">
-              <span id="play-icon">▶</span><span id="play-label">Play</span>
-            </button>
-            <label class="speed-control" for="speed-select">
-              <span>Velocidade</span>
-              <select id="speed-select" disabled aria-label="Velocidade da simulação">
-                <option value="1">1×</option>
-                <option value="2">2×</option>
-                <option value="4">4×</option>
-              </select>
-            </label>
-          </div>
-        </section>
-
-        <div class="sidebar-bottom">
-          <span>CONTÁGIO <span class="muted">/</span> PROJETO DE SIMULAÇÃO</span>
-          <span>V 0.1.0</span>
-        </div>
-      </aside>
+      <section class="final-cta"><div><div class="eyebrow">AGORA É SUA VEZ</div><h2>Coloque o algoritmo para trabalhar.</h2><p>Avance manualmente, anime a execução ou pule direto para o resultado.</p></div><a class="button button-primary" href="laboratorio.html">Abrir laboratório <span>→</span></a></section>
     </main>
+
+    <footer class="footer"><a class="brand" href="index.html"><span class="brand-mark">S<span>·</span>A</span><span>SEJA O ALGORITMO</span></a><span>Aprender algoritmos fazendo escolhas.</span><a href="#como-funciona">Ver etapas ↑</a></footer>
   </div>
-
-  <!-- Menu inicial -->
-  <div class="overlay overlay-menu is-visible" id="menu-overlay" role="dialog" aria-modal="true" aria-labelledby="menu-title">
-    <div class="modal-card menu-card">
-      <div class="modal-emblem"><span class="brand-mark large"><span></span><span></span><span></span></span></div>
-      <span class="eyebrow">SIMULADOR ESTRATÉGICO · 2D</span>
-      <h2 id="menu-title">Uma cidade.<br><span>Uma epidemia.</span></h2>
-      <p>Entenda como uma doença se espalha, acompanhe os contatos entre habitantes e tome decisões para proteger a população.</p>
-      <button class="primary-button modal-primary" id="btn-start" type="button">Jogar <span>→</span></button>
-      <div class="modal-meta"><span>● MODELO EXPERIMENTAL</span><span>CONTÁGIO / LAB</span></div>
-    </div>
-  </div>
-
-  <!-- Resultado da fase -->
-  <div class="overlay" id="level-overlay" role="dialog" aria-modal="true" aria-labelledby="level-result-title" hidden>
-    <div class="modal-card result-card">
-      <span class="eyebrow" id="level-result-kicker">RESULTADO DA FASE</span>
-      <h2 id="level-result-title">Fase concluída</h2>
-      <p id="level-result-message">O resultado da simulação aparecerá aqui.</p>
-      <div class="result-actions">
-        <button class="secondary-button" id="btn-retry" type="button">Tentar de novo</button>
-        <button class="primary-button modal-primary" id="btn-next-level" type="button" hidden>Próxima fase <span>→</span></button>
-      </div>
-      <button class="text-button" id="btn-level-continue" type="button">Voltar ao jogo</button>
-    </div>
-  </div>
-
-  <div class="toast-root" id="toast-root" aria-live="polite" aria-atomic="false"></div>
-
-  <!-- Scripts: dependências carregadas em ordem. -->
-  <script src="js/config.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/selection.js"></script>
-  <script src="js/pairs.js"></script>
-  <script src="js/world.js"></script>
-  <script src="js/epidemic.js"></script>
-  <script src="js/actions.js"></script>
-  <script src="js/renderer.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/levels.js"></script>
-  <script src="js/main.js"></script>
 </body>
 </html>
