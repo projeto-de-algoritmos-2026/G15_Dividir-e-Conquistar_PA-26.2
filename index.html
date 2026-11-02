@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="Contágio — simulação estratégica de epidemias em uma cidade.">
+  <title>Contágio — Simulador de epidemias</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Contágio — início">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="brand-copy">
+          <strong>Contágio</strong>
+          <small>SIMULADOR DE EPIDEMIAS</small>
+        </span>
+      </a>
+      <div class="topbar-center">
+        <span class="eyebrow">SIMULAÇÃO EM ANDAMENTO</span>
+        <div class="day-display">DIA <strong id="current-day">01</strong></div>
+      </div>
+      <div class="topbar-right">
+        <span class="status-dot"></span>
+        <span>MODELO LOCAL</span>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <section class="city-section" aria-label="Mapa da cidade">
+        <div class="section-heading city-heading">
+          <div>
+            <span class="eyebrow">VISÃO GERAL</span>
+            <h1>Mapa da cidade</h1>
+          </div>
+          <div class="map-legend" aria-label="Legenda dos estados">
+            <span><i class="legend-dot susceptible"></i>Suscetível</span>
+            <span><i class="legend-dot infected"></i>Infectado</span>
+            <span><i class="legend-dot recovered"></i>Recuperado</span>
+            <span><i class="legend-dot vaccinated"></i>Vacinado</span>
+          </div>
+        </div>
+
+        <div class="city-frame">
+          <div class="map-topline">
+            <span><i class="live-indicator"></i> SIMULAÇÃO</span>
+            <span id="city-population">POPULAÇÃO: —</span>
+          </div>
+          <canvas id="city" width="1100" height="720" aria-label="Representação 2D da cidade e de seus habitantes">
+            Seu navegador não oferece suporte ao elemento canvas.
+          </canvas>
+          <div class="map-coordinates" aria-hidden="true">
+            <span>SETOR URBANO · 01</span>
+            <span>CONTÁGIO / LAB</span>
+          </div>
+        </div>
+
+        <div class="city-footer">
+          <div class="footer-note">
+            <span class="footer-icon">⌖</span>
+            <span>Observe os deslocamentos e os focos de transmissão em tempo real.</span>
+          </div>
+          <span class="simulation-tag">2D · TEMPO DISCRETO</span>
+        </div>
+      </section>
+
+      <aside class="sidebar" aria-label="Painel de controle">
+        <section class="panel stats-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">CENÁRIO ATUAL</span>
+              <h2>Estatísticas</h2>
+            </div>
+            <span class="panel-icon" aria-hidden="true">▥</span>
+          </div>
+          <div class="stats-grid">
+            <article class="stat-card stat-s">
+              <span class="stat-label"><i class="legend-dot susceptible"></i> SUSCETÍVEIS</span>
+              <strong id="stat-susceptible">—</strong>
+              <small>Não infectados</small>
+            </article>
+            <article class="stat-card stat-i">
+              <span class="stat-label"><i class="legend-dot infected"></i> INFECTADOS</span>
+              <strong id="stat-infected">—</strong>
+              <small>Em circulação</small>
+            </article>
+            <article class="stat-card stat-r">
+              <span class="stat-label"><i class="legend-dot recovered"></i> RECUPERADOS</span>
+              <strong id="stat-recovered">—</strong>
+              <small>Imunidade adquirida</small>
+            </article>
+            <article class="stat-card stat-v">
+              <span class="stat-label"><i class="legend-dot vaccinated"></i> VACINADOS</span>
+              <strong id="stat-vaccinated">—</strong>
+              <small>Proteção aplicada</small>
+            </article>
+          </div>
+          <div class="hospital-block">
+            <div class="hospital-heading">
+              <span>Ocupação hospitalar</span>
+              <strong id="hospital-occupancy">— / —</strong>
+            </div>
+            <div class="progress-track" role="progressbar" aria-label="Ocupação hospitalar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="hospital-progress">
+              <span id="hospital-progress-fill"></span>
+            </div>
+            <div class="progress-caption">
+              <span>Capacidade disponível</span>
+              <strong id="hospital-available">—</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel actions-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">INTERVENÇÕES</span>
+              <h2>Medidas</h2>
+            </div>
+            <span class="panel-icon" aria-hidden="true">✳</span>
+          </div>
+          <div class="action-list">
+            <button class="action-button" id="btn-lockdown" type="button" disabled>
+              <span class="action-symbol lockdown-symbol">⌑</span>
+              <span class="action-copy"><strong>Lockdown de distrito</strong><small>Restringir circulação em uma área</small></span>
+              <span class="action-arrow">›</span>
+            </button>
+            <button class="action-button" id="btn-distancing" type="button" disabled>
+              <span class="action-symbol distancing-symbol">↔</span>
+              <span class="action-copy"><strong>Distanciamento</strong><small>Reduzir a proximidade entre pessoas</small></span>
+              <span class="action-arrow">›</span>
+            </button>
+            <button class="action-button" id="btn-vaccinate" type="button" disabled>
+              <span class="action-symbol vaccine-symbol">✚</span>
+              <span class="action-copy"><strong>Vacinar</strong><small>Imunizar parte da população</small></span>
+              <span class="action-arrow">›</span>
+            </button>
+            <button class="action-button" id="btn-trace" type="button" disabled>
+              <span class="action-symbol trace-symbol">⌕</span>
+              <span class="action-copy"><strong>Rastrear contatos</strong><small>Identificar e isolar contatos recentes</small></span>
+              <span class="action-arrow">›</span>
+            </button>
+          </div>
+          <p class="panel-hint">As medidas estratégicas serão habilitadas ao iniciar uma fase.</p>
+        </section>
+
+        <section class="panel algorithm-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">DIVIDIR E CONQUISTAR</span>
+              <h2>Algoritmo</h2>
+            </div>
+            <span class="complexity-chip">O(n log n + k)</span>
+          </div>
+          <div class="algorithm-metrics">
+            <div class="algorithm-metric">
+              <span>Comparações · D&amp;C</span>
+              <strong id="algorithm-comparisons">—</strong>
+            </div>
+            <div class="algorithm-metric">
+              <span>Força bruta</span>
+              <strong id="brute-comparisons">—</strong>
+            </div>
+            <div class="algorithm-metric">
+              <span>Profundidade da árvore</span>
+              <strong id="tree-depth">—</strong>
+            </div>
+          </div>
+          <label class="toggle-row" for="toggle-districts">
+            <span class="toggle-copy"><strong>Mostrar divisão em distritos</strong><small>Exibir os cortes da recursão no mapa</small></span>
+            <input id="toggle-districts" type="checkbox" disabled>
+            <span class="toggle-control" aria-hidden="true"></span>
+          </label>
+        </section>
+
+        <section class="panel controls-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">CONTROLE DO TEMPO</span>
+              <h2>Simulação</h2>
+            </div>
+            <span class="panel-icon" aria-hidden="true">◷</span>
+          </div>
+          <button class="primary-button" id="btn-next-day" type="button" disabled>
+            <span>Próximo dia</span><span class="button-shortcut">→</span>
+          </button>
+          <div class="playback-row">
+            <button class="secondary-button" id="btn-play-pause" type="button" disabled>
+              <span id="play-icon">▶</span><span id="play-label">Play</span>
+            </button>
+            <label class="speed-control" for="speed-select">
+              <span>Velocidade</span>
+              <select id="speed-select" disabled>
+                <option value="1">1×</option>
+                <option value="2">2×</option>
+                <option value="4">4×</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <div class="sidebar-bottom">
+          <span>CONTÁGIO <span class="muted">/</span> PROJETO DE SIMULAÇÃO</span>
+          <span>V 0.1.0</span>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Menu inicial -->
+  <div class="overlay overlay-menu is-visible" id="menu-overlay" role="dialog" aria-modal="true" aria-labelledby="menu-title">
+    <div class="modal-card menu-card">
+      <div class="modal-emblem"><span class="brand-mark large"><span></span><span></span><span></span></span></div>
+      <span class="eyebrow">SIMULADOR ESTRATÉGICO · 2D</span>
+      <h2 id="menu-title">Uma cidade.<br><span>Uma epidemia.</span></h2>
+      <p>Entenda como uma doença se espalha, acompanhe os contatos entre habitantes e tome decisões para proteger a população.</p>
+      <button class="primary-button modal-primary" id="btn-start" type="button">Jogar <span>→</span></button>
+      <div class="modal-meta"><span>● MODELO EXPERIMENTAL</span><span>CONTÁGIO / LAB</span></div>
+    </div>
+  </div>
+
+  <!-- Resultado da fase -->
+  <div class="overlay" id="level-overlay" role="dialog" aria-modal="true" aria-labelledby="level-result-title" hidden>
+    <div class="modal-card result-card">
+      <span class="eyebrow" id="level-result-kicker">RESULTADO DA FASE</span>
+      <h2 id="level-result-title">Fase concluída</h2>
+      <p id="level-result-message">O resultado da simulação aparecerá aqui.</p>
+      <button class="primary-button modal-primary" id="btn-level-continue" type="button">Continuar <span>→</span></button>
+    </div>
+  </div>
+
+  <!-- Scripts: dependências carregadas em ordem. -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <!-- TODO: <script src="js/selection.js"></script> -->
+  <!-- TODO: <script src="js/pairs.js"></script> -->
+  <!-- TODO: <script src="js/world.js"></script> -->
+  <!-- TODO: <script src="js/epidemic.js"></script> -->
+  <!-- TODO: <script src="js/actions.js"></script> -->
+  <!-- TODO: <script src="js/renderer.js"></script> -->
+  <!-- TODO: <script src="js/ui.js"></script> -->
+  <!-- TODO: <script src="js/levels.js"></script> -->
+  <!-- TODO: <script src="js/main.js"></script> -->
+</body>
+</html>
