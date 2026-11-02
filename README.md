@@ -1,6 +1,6 @@
 # Seja o Algoritmo
 
-Projeto educacional e interativo para estudar o algoritmo do par de pontos mais próximo usando dividir e conquistar. A interface usa uma paleta clara, tons de papel, verde e terracota, e fontes disponíveis no próprio sistema.
+Projeto educacional e interativo para estudar o algoritmo do par de pontos mais próximo usando dividir e conquistar. A interface oferece tema claro e escuro, com preferência salva no navegador, além de fontes disponíveis no próprio sistema.
 
 ## Executar
 
@@ -16,10 +16,15 @@ Não é necessário instalar dependências, usar API ou ferramenta de build. Abr
 - `css/styles.css`: estilos gerais e componentes compartilhados.
 - `css/lab.css`: estilos do laboratório interativo.
 - `js/site.js`: comportamento compartilhado da navegação.
+- `js/theme.js`: alternância e persistência dos temas claro e escuro.
 - `js/closest-pair.js`: algoritmo e geração dos eventos de execução.
 - `js/lab.js`: geração dos pontos, renderização SVG, controles e animação.
 - `tests/closest-pair.test.js`: testes matemáticos do algoritmo.
 - `tests/lab-ui.test.js`: teste de inicialização e controles do laboratório com DOM simulado.
+
+## Aparência
+
+Use o botão com símbolo de lua/sol no cabeçalho para alternar entre tema claro e escuro. A escolha fica salva neste navegador e é aplicada nas duas páginas.
 
 ## Controles do laboratório
 
@@ -39,6 +44,7 @@ Com Node.js instalado, execute na pasta do projeto:
 ```bash
 node tests/closest-pair.test.js
 node tests/lab-ui.test.js
+node tests/theme.test.js
 ```
 
 A primeira bateria compara a resposta do algoritmo com um método de referência que mede todos os pares (força bruta), em entradas aleatórias e casos-limite. A segunda verifica se os pontos são desenhados na inicialização e exercita os controles principais.

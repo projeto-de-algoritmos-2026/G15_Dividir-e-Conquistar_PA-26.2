@@ -4,10 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f2efe7">
+  <script>(function(){try{var t=localStorage.getItem("sea-algorithm-theme");if(t==="dark"||t==="light"){document.documentElement.setAttribute("data-theme",t);var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content",t==="dark"?"#171d19":"#f2efe7")}}catch(e){}})();</script>
   <meta name="description" content="Entenda e execute visualmente o algoritmo do par de pontos mais próximo usando dividir e conquistar.">
   <title>Seja o Algoritmo — Par de pontos mais próximo</title>
   <link rel="stylesheet" href="css/styles.css">
   <script defer src="js/site.js"></script>
+  <script defer src="js/theme.js"></script>
 </head>
 <body>
   <div class="site-shell">
@@ -16,6 +18,7 @@
       <nav class="main-nav" aria-label="Navegação principal">
         <a class="active" href="index.html">O algoritmo</a>
         <a class="nav-cta" href="laboratorio.html">Abrir laboratório <span>↗</span></a>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ativar modo escuro" title="Ativar modo escuro" aria-pressed="false">☾</button>
       </nav>
     </header>
 
@@ -35,15 +38,15 @@
           <div class="art-glow"></div>
           <div class="art-label art-label-top">Plano de pontos <span>dividir → combinar</span></div>
           <svg class="hero-graph" viewBox="0 0 560 390" role="img" aria-label="Pontos separados em duas metades por um corte vertical; dois pontos próximos atravessam o corte">
-            <defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#ded9cd" stroke-width="1" opacity=".55"/></pattern><linearGradient id="stripGlow" x1="0" x2="1"><stop stop-color="#b9684c" stop-opacity=".08"/><stop offset=".5" stop-color="#b9684c" stop-opacity=".3"/><stop offset="1" stop-color="#b9684c" stop-opacity=".08"/></linearGradient></defs>
-            <rect x="18" y="18" width="524" height="350" rx="16" fill="url(#grid)" stroke="#ded9cd"/>
+            <defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="var(--plot-grid)" stroke-width="1" opacity=".55"/></pattern><linearGradient id="stripGlow" x1="0" x2="1"><stop stop-color="var(--clay)" stop-opacity=".08"/><stop offset=".5" stop-color="var(--clay)" stop-opacity=".3"/><stop offset="1" stop-color="var(--clay)" stop-opacity=".08"/></linearGradient></defs>
+            <rect x="18" y="18" width="524" height="350" rx="16" fill="url(#grid)" stroke="var(--plot-grid)"/>
             <rect x="255" y="18" width="112" height="350" fill="url(#stripGlow)"/>
-            <path d="M311 18V368" stroke="#3d6655" stroke-width="2" stroke-dasharray="7 7"/>
-            <g fill="#548775"><circle cx="72" cy="78" r="6"/><circle cx="124" cy="154" r="6"/><circle cx="175" cy="95" r="6"/><circle cx="205" cy="280" r="6"/><circle cx="95" cy="320" r="6"/><circle cx="245" cy="215" r="6"/></g>
-            <g fill="#c58b45"><circle cx="390" cy="72" r="6"/><circle cx="430" cy="180" r="6"/><circle cx="478" cy="110" r="6"/><circle cx="395" cy="290" r="6"/><circle cx="480" cy="310" r="6"/><circle cx="350" cy="230" r="6"/></g>
-            <path d="M245 215L350 230" stroke="#b9684c" stroke-width="2.5" stroke-linecap="round"/><circle cx="245" cy="215" r="10" fill="none" stroke="#b9684c" opacity=".65"/><circle cx="350" cy="230" r="10" fill="none" stroke="#b9684c" opacity=".65"/>
-            <rect x="279" y="30" width="65" height="25" rx="12" fill="#b9684c"/><text x="311" y="47" text-anchor="middle" fill="white" font-size="10" font-family="DM Mono">CORTE</text>
-            <path d="M18 368H542" stroke="#d0c9bc"/><path d="M18 18V368" stroke="#d0c9bc"/>
+            <path d="M311 18V368" stroke="var(--plot-cut)" stroke-width="2" stroke-dasharray="7 7"/>
+            <g fill="var(--plot-left)"><circle cx="72" cy="78" r="6"/><circle cx="124" cy="154" r="6"/><circle cx="175" cy="95" r="6"/><circle cx="205" cy="280" r="6"/><circle cx="95" cy="320" r="6"/><circle cx="245" cy="215" r="6"/></g>
+            <g fill="var(--plot-right)"><circle cx="390" cy="72" r="6"/><circle cx="430" cy="180" r="6"/><circle cx="478" cy="110" r="6"/><circle cx="395" cy="290" r="6"/><circle cx="480" cy="310" r="6"/><circle cx="350" cy="230" r="6"/></g>
+            <path d="M245 215L350 230" stroke="var(--clay)" stroke-width="2.5" stroke-linecap="round"/><circle cx="245" cy="215" r="10" fill="none" stroke="var(--clay)" opacity=".65"/><circle cx="350" cy="230" r="10" fill="none" stroke="var(--clay)" opacity=".65"/>
+            <rect x="279" y="30" width="65" height="25" rx="12" fill="var(--clay)"/><text x="311" y="47" text-anchor="middle" fill="white" font-size="10" font-family="DM Mono">CORTE</text>
+            <path d="M18 368H542" stroke="var(--plot-axis)"/><path d="M18 18V368" stroke="var(--plot-axis)"/>
           </svg>
           <div class="art-label art-label-bottom"><span><i class="legend-dot mint"></i> Metade esquerda</span><span><i class="legend-dot amber"></i> Metade direita</span></div>
           <div class="floating-note"><span class="note-spark">✦</span><div><b>A estratégia</b><small>Dividir o conjunto e juntar as melhores respostas.</small></div></div>

@@ -166,34 +166,34 @@
     var maxX = Math.max.apply(null, (node ? node.points : points).map(function (p) { return p.x; }));
     var rangeWidth = Math.max(1, maxX - minX);
     if (node) {
-      layer.push(svgElement('rect', { x: Math.max(0, minX - 22), y: 0, width: Math.min(WIDTH, rangeWidth + 44), height: HEIGHT, fill: 'rgba(61,102,85,.055)' }, ''));
+      layer.push(svgElement('rect', { x: Math.max(0, minX - 22), y: 0, width: Math.min(WIDTH, rangeWidth + 44), height: HEIGHT, fill: 'var(--plot-area)' }, ''));
     }
 
     if (event && Number.isFinite(event.cutX) && (event.type === 'divide' || event.type === 'strip' || event.type === 'strip-compare' || event.type === 'merge')) {
       if (event.type === 'strip' || event.type === 'strip-compare') {
         var delta = Number(event.delta) || 0;
-        layer.push(svgElement('rect', { x: event.cutX - delta, y: 0, width: Math.max(0, delta * 2), height: HEIGHT, fill: 'rgba(185,104,76,.13)' }, ''));
+        layer.push(svgElement('rect', { x: event.cutX - delta, y: 0, width: Math.max(0, delta * 2), height: HEIGHT, fill: 'var(--plot-band)' }, ''));
       } else if (event.type === 'merge' && node && node.left && node.right) {
         var mergeDelta = Math.min(node.left.best.distance, node.right.best.distance);
-        layer.push(svgElement('rect', { x: event.cutX - mergeDelta, y: 0, width: mergeDelta * 2, height: HEIGHT, fill: 'rgba(185,104,76,.08)' }, ''));
+        layer.push(svgElement('rect', { x: event.cutX - mergeDelta, y: 0, width: mergeDelta * 2, height: HEIGHT, fill: 'var(--plot-band-soft)' }, ''));
       }
-      layer.push(svgElement('line', { x1: event.cutX, y1: 0, x2: event.cutX, y2: HEIGHT, stroke: '#b9684c', 'stroke-width': 2, 'stroke-dasharray': '8 7', opacity: .9 }, ''));
-      layer.push(svgElement('rect', { x: event.cutX - 29, y: 9, width: 58, height: 22, rx: 8, fill: '#3d6655' }, ''));
+      layer.push(svgElement('line', { x1: event.cutX, y1: 0, x2: event.cutX, y2: HEIGHT, stroke: 'var(--plot-selected)', 'stroke-width': 2, 'stroke-dasharray': '8 7', opacity: .9 }, ''));
+      layer.push(svgElement('rect', { x: event.cutX - 29, y: 9, width: 58, height: 22, rx: 8, fill: 'var(--green)' }, ''));
       layer.push(svgElement('text', { x: event.cutX, y: 24, 'text-anchor': 'middle', fill: '#fff', 'font-size': 10, 'font-family': 'monospace' }, 'Corte'));
     }
 
     if (event && event.type === 'base-start') {
-      layer.push(svgElement('rect', { x: Math.max(0, minX - 30), y: 0, width: rangeWidth + 60, height: HEIGHT, rx: 4, fill: 'rgba(84,135,117,.08)', stroke: '#548775', 'stroke-width': 1, 'stroke-dasharray': '4 5' }, ''));
+      layer.push(svgElement('rect', { x: Math.max(0, minX - 30), y: 0, width: rangeWidth + 60, height: HEIGHT, rx: 4, fill: 'var(--plot-strip-area)', stroke: 'var(--plot-left)', 'stroke-width': 1, 'stroke-dasharray': '4 5' }, ''));
     }
 
     points.forEach(function (point) {
       var active = activeIds.has(point.id);
-      var sideColor = leftIds.has(point.id) ? '#548775' : rightIds.has(point.id) ? '#c58b45' : '#96978e';
-      var color = pairIds.has(point.id) || finalIds.has(point.id) ? '#b9684c' : (stripIds.has(point.id) ? '#a87d58' : sideColor);
+      var sideColor = leftIds.has(point.id) ? 'var(--plot-left)' : rightIds.has(point.id) ? 'var(--plot-right)' : 'var(--plot-neutral)';
+      var color = pairIds.has(point.id) || finalIds.has(point.id) ? 'var(--plot-selected)' : (stripIds.has(point.id) ? 'var(--plot-strip)' : sideColor);
       var opacity = active || event && event.type === 'complete' ? 1 : .26;
-      layer.push(svgElement('circle', { cx: point.x, cy: point.y, r: pairIds.has(point.id) || finalIds.has(point.id) ? 10 : 7, fill: color, opacity: opacity, stroke: '#fffefa', 'stroke-width': pairIds.has(point.id) || finalIds.has(point.id) ? 2 : 1.5 }, ''));
+      layer.push(svgElement('circle', { cx: point.x, cy: point.y, r: pairIds.has(point.id) || finalIds.has(point.id) ? 10 : 7, fill: color, opacity: opacity, stroke: 'var(--plot-bg)', 'stroke-width': pairIds.has(point.id) || finalIds.has(point.id) ? 2 : 1.5 }, ''));
       if (active || event && event.type === 'complete') {
-        layer.push(svgElement('text', { x: point.x, y: point.y - 12, 'text-anchor': 'middle', fill: '#59645d', 'font-size': 10, 'font-family': 'monospace', opacity: .85 }, 'P' + point.id));
+        layer.push(svgElement('text', { x: point.x, y: point.y - 12, 'text-anchor': 'middle', fill: 'var(--plot-label)', 'font-size': 10, 'font-family': 'monospace', opacity: .85 }, 'P' + point.id));
       }
     });
 
@@ -202,11 +202,11 @@
       var p1 = points.find(function (p) { return String(p.id) === String(pair[0]); });
       var p2 = points.find(function (p) { return String(p.id) === String(pair[1]); });
       if (p1 && p2) {
-        layer.push(svgElement('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: '#a85e46', 'stroke-width': event.type === 'complete' ? 4 : 2.5, 'stroke-linecap': 'round', 'stroke-dasharray': event.type === 'complete' ? 'none' : '5 4' }, ''));
+        layer.push(svgElement('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: 'var(--plot-line)', 'stroke-width': event.type === 'complete' ? 4 : 2.5, 'stroke-linecap': 'round', 'stroke-dasharray': event.type === 'complete' ? 'none' : '5 4' }, ''));
         if (event.type === 'complete') {
           var middleX = (p1.x + p2.x) / 2;
           var middleY = (p1.y + p2.y) / 2;
-          layer.push(svgElement('rect', { x: middleX - 38, y: middleY - 28, width: 76, height: 20, rx: 7, fill: '#3d6655' }, ''));
+          layer.push(svgElement('rect', { x: middleX - 38, y: middleY - 28, width: 76, height: 20, rx: 7, fill: 'var(--green)' }, ''));
           layer.push(svgElement('text', { x: middleX, y: middleY - 14, 'text-anchor': 'middle', fill: '#fff', 'font-size': 10, 'font-family': 'monospace' }, event.bestDistance.toFixed(1)));
         }
       }
