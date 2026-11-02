@@ -30,6 +30,11 @@
     MIN_PLAY_INTERVAL_MS: 120,
     SPEED_LEVELS: Object.freeze([1, 2, 4]),
 
+    // Limites de visualização e parâmetros do autoteste de pares próximos.
+    PAIR_TREE_MAX_DEPTH: 6,
+    PAIRS_SELF_TEST_RUNS: 5,
+    PAIRS_SELF_TEST_POPULATION: 500,
+
     COLORS: Object.freeze({
       S: '#4ba7ff',
       I: '#ff5f70',
