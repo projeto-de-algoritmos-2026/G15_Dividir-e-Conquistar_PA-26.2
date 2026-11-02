@@ -51,6 +51,7 @@
           <canvas id="city" width="1100" height="720" aria-label="Representação 2D da cidade e de seus habitantes">
             Seu navegador não oferece suporte ao elemento canvas.
           </canvas>
+          <div class="selection-hint" id="selection-hint" role="status" hidden>Clique em um distrito · ESC para cancelar</div>
           <div class="map-coordinates" aria-hidden="true">
             <span>SETOR URBANO · 01</span>
             <span>CONTÁGIO / LAB</span>
@@ -80,23 +81,28 @@
               <span class="stat-label"><i class="legend-dot susceptible"></i> SUSCETÍVEIS</span>
               <strong id="stat-susceptible">—</strong>
               <small>Não infectados</small>
+              <div class="stat-progress"><span id="bar-susceptible"></span></div>
             </article>
             <article class="stat-card stat-i">
               <span class="stat-label"><i class="legend-dot infected"></i> INFECTADOS</span>
               <strong id="stat-infected">—</strong>
               <small>Em circulação</small>
+              <div class="stat-progress"><span id="bar-infected"></span></div>
             </article>
             <article class="stat-card stat-r">
               <span class="stat-label"><i class="legend-dot recovered"></i> RECUPERADOS</span>
               <strong id="stat-recovered">—</strong>
               <small>Imunidade adquirida</small>
+              <div class="stat-progress"><span id="bar-recovered"></span></div>
             </article>
             <article class="stat-card stat-v">
               <span class="stat-label"><i class="legend-dot vaccinated"></i> VACINADOS</span>
               <strong id="stat-vaccinated">—</strong>
               <small>Proteção aplicada</small>
+              <div class="stat-progress"><span id="bar-vaccinated"></span></div>
             </article>
           </div>
+          <div class="budget-strip"><span>Orçamento disponível</span><strong id="budget-value">—</strong></div>
           <div class="hospital-block">
             <div class="hospital-heading">
               <span>Ocupação hospitalar</span>
@@ -121,22 +127,22 @@
             <span class="panel-icon" aria-hidden="true">✳</span>
           </div>
           <div class="action-list">
-            <button class="action-button" id="btn-lockdown" type="button" disabled>
+            <button class="action-button" id="btn-lockdown" type="button" disabled aria-label="Selecionar distrito para lockdown">
               <span class="action-symbol lockdown-symbol">⌑</span>
               <span class="action-copy"><strong>Lockdown de distrito</strong><small>Restringir circulação em uma área</small></span>
               <span class="action-arrow">›</span>
             </button>
-            <button class="action-button" id="btn-distancing" type="button" disabled>
+            <button class="action-button" id="btn-distancing" type="button" disabled aria-label="Ativar ou desativar distanciamento">
               <span class="action-symbol distancing-symbol">↔</span>
               <span class="action-copy"><strong>Distanciamento</strong><small>Reduzir a proximidade entre pessoas</small></span>
               <span class="action-arrow">›</span>
             </button>
-            <button class="action-button" id="btn-vaccinate" type="button" disabled>
+            <button class="action-button" id="btn-vaccinate" type="button" disabled aria-label="Vacinar pessoas suscetíveis">
               <span class="action-symbol vaccine-symbol">✚</span>
               <span class="action-copy"><strong>Vacinar</strong><small>Imunizar parte da população</small></span>
               <span class="action-arrow">›</span>
             </button>
-            <button class="action-button" id="btn-trace" type="button" disabled>
+            <button class="action-button" id="btn-trace" type="button" disabled aria-label="Rastrear contatos ou isolar contatos rastreados">
               <span class="action-symbol trace-symbol">⌕</span>
               <span class="action-copy"><strong>Rastrear contatos</strong><small>Identificar e isolar contatos recentes</small></span>
               <span class="action-arrow">›</span>
@@ -166,12 +172,34 @@
               <span>Profundidade da árvore</span>
               <strong id="tree-depth">—</strong>
             </div>
+            <div class="algorithm-metric">
+              <span>Razão força bruta / D&amp;C</span>
+              <strong id="comparison-ratio">—</strong>
+            </div>
           </div>
           <label class="toggle-row" for="toggle-districts">
             <span class="toggle-copy"><strong>Mostrar divisão em distritos</strong><small>Exibir os cortes da recursão no mapa</small></span>
-            <input id="toggle-districts" type="checkbox" disabled>
+            <input id="toggle-districts" type="checkbox" disabled aria-label="Mostrar divisão em distritos">
             <span class="toggle-control" aria-hidden="true"></span>
           </label>
+          <label class="toggle-row compact-toggle" for="toggle-strip">
+            <span class="toggle-copy"><strong>Mostrar faixa central</strong><small>Faixa de contatos entre regiões</small></span>
+            <input id="toggle-strip" type="checkbox" disabled aria-label="Mostrar faixa central de contato">
+            <span class="toggle-control" aria-hidden="true"></span>
+          </label>
+          <label class="toggle-row compact-toggle" for="toggle-pairs">
+            <span class="toggle-copy"><strong>Mostrar linhas de contato</strong><small>Pares com risco de transmissão</small></span>
+            <input id="toggle-pairs" type="checkbox" disabled aria-label="Mostrar linhas de contato com risco">
+            <span class="toggle-control" aria-hidden="true"></span>
+          </label>
+        </section>
+
+        <section class="panel chart-panel">
+          <div class="panel-heading">
+            <div><span class="eyebrow">EVOLUÇÃO DIÁRIA</span><h2>Curva epidemiológica</h2></div>
+          </div>
+          <div class="chart-legend"><span class="chart-s">S</span><span class="chart-i">I</span><span class="chart-r">R</span><span class="chart-v">V</span></div>
+          <canvas id="chart" height="140" aria-label="Gráfico da evolução diária de suscetíveis, infectados, recuperados e vacinados"></canvas>
         </section>
 
         <section class="panel controls-panel">
@@ -182,16 +210,16 @@
             </div>
             <span class="panel-icon" aria-hidden="true">◷</span>
           </div>
-          <button class="primary-button" id="btn-next-day" type="button" disabled>
+          <button class="primary-button" id="btn-next-day" type="button" disabled aria-label="Avançar um dia da simulação">
             <span>Próximo dia</span><span class="button-shortcut">→</span>
           </button>
           <div class="playback-row">
-            <button class="secondary-button" id="btn-play-pause" type="button" disabled>
+            <button class="secondary-button" id="btn-play-pause" type="button" disabled aria-label="Iniciar simulação automática">
               <span id="play-icon">▶</span><span id="play-label">Play</span>
             </button>
             <label class="speed-control" for="speed-select">
               <span>Velocidade</span>
-              <select id="speed-select" disabled>
+              <select id="speed-select" disabled aria-label="Velocidade da simulação">
                 <option value="1">1×</option>
                 <option value="2">2×</option>
                 <option value="4">4×</option>
@@ -226,9 +254,15 @@
       <span class="eyebrow" id="level-result-kicker">RESULTADO DA FASE</span>
       <h2 id="level-result-title">Fase concluída</h2>
       <p id="level-result-message">O resultado da simulação aparecerá aqui.</p>
-      <button class="primary-button modal-primary" id="btn-level-continue" type="button">Continuar <span>→</span></button>
+      <div class="result-actions">
+        <button class="secondary-button" id="btn-retry" type="button">Tentar de novo</button>
+        <button class="primary-button modal-primary" id="btn-next-level" type="button" hidden>Próxima fase <span>→</span></button>
+      </div>
+      <button class="text-button" id="btn-level-continue" type="button">Voltar ao jogo</button>
     </div>
   </div>
+
+  <div class="toast-root" id="toast-root" aria-live="polite" aria-atomic="false"></div>
 
   <!-- Scripts: dependências carregadas em ordem. -->
   <script src="js/config.js"></script>
@@ -239,7 +273,7 @@
   <script src="js/epidemic.js"></script>
   <script src="js/actions.js"></script>
   <script src="js/renderer.js"></script>
-  <!-- TODO: <script src="js/ui.js"></script> -->
+  <script src="js/ui.js"></script>
   <!-- TODO: <script src="js/levels.js"></script> -->
   <!-- TODO: <script src="js/main.js"></script> -->
 </body>
