@@ -153,8 +153,8 @@
    *
    * A probabilidade diminui com a distância: p = INFECTION_PROB *
    * sqrt(1 - distância / CONTACT_RADIUS). Assim, contatos mais próximos
-   * têm maior chance de transmissão. A quarentena bloqueia a transmissão
-   * se qualquer integrante do par estiver em quarentena.
+   * têm maior chance de transmissão. A quarentena reduz a transmissão:
+   * cada integrante em quarentena multiplica a chance por QUARANTINE_LEAKAGE.
    */
   Epidemic.step = function (world, pairs) {
     var config = getConfig();
@@ -217,6 +217,13 @@
       // A chance tende a zero no limite do raio e é máxima em distância zero.
       var proximityFactor = Math.sqrt(Math.max(0, 1 - (distance / contactRadius)));
       var probability = infectionProbability * proximityFactor;
+      var leakage = Utils.clamp(
+        Number.isFinite(config.QUARANTINE_LEAKAGE) ? config.QUARANTINE_LEAKAGE : 0.1,
+        0,
+        1
+      );
+      if (source.quarantined) probability *= leakage;
+      if (target.quarantined) probability *= leakage;
 
       // Para vacinados, a eficácia reduz a chance de breakthrough.
       if (targetState === 'V') {

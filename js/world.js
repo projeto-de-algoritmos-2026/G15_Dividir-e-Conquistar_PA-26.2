@@ -139,7 +139,14 @@
         recoveries: 0
       },
       lastPairs: [],
-      lastTree: null
+      lastTree: null,
+      budget: Number.isFinite(config.INITIAL_BUDGET) ? config.INITIAL_BUDGET : 100,
+      actionState: {
+        lockdowns: {},
+        distancing: { active: false, strength: 0, daysRemaining: 0 },
+        tracedPeople: [],
+        tracedQuarantine: {}
+      }
     };
 
     for (var index = 0; index < population; index += 1) {
