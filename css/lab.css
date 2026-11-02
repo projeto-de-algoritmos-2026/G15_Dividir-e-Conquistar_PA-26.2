@@ -3,3 +3,9 @@
 @media(max-width:640px){.lab-page{padding:36px 0}.lab-heading{align-items:start;flex-direction:column;margin-bottom:17px}.lab-heading h1{font-size:35px}.lab-toolbar{align-items:stretch;gap:12px;padding:14px}.toolbar-group{min-width:0;flex:1}.toolbar-actions{width:100%}.toolbar-actions .btn{flex:1}.inspector-column{grid-template-columns:1fr}.log-panel{grid-column:auto}.visual-panel{padding:12px}.canvas-wrap svg{min-height:210px}.step-controls{gap:5px}.step-controls .icon-btn{width:31px;height:32px}.btn-play{padding:0 10px;font-size:9px}.step-controls .btn-subtle{padding:0 8px;font-size:9px}.plot-legend{gap:9px;font-size:8px}.result-panel{gap:12px;padding:16px}.result-copy{min-width:calc(100% - 60px)}.result-distance{border-left:0;padding-left:0}.result-actions{width:100%}.result-actions .btn{flex:1}}
 
 .result-panel[hidden]{display:none}
+
+
+/* Explicação curta da referência usada na comparação dos métodos. */
+.comparison-explainer{margin:9px 1px 0;color:#91a0ba;font-size:10px;line-height:1.65}
+.comparison-explainer b{color:#d9e0f2;font-weight:700}
+.comparison-explainer i{font-family:var(--mono);font-style:normal;color:#c5c4ff}

@@ -20,3 +20,9 @@
 .algorithm-steps { grid-template-columns:repeat(4,minmax(0,1fr)); }
 @media(max-width:900px){ .algorithm-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:640px){ .algorithm-steps { grid-template-columns:1fr; } }
+
+
+/* Marca: as três partes ficam alinhadas na horizontal dentro do quadrado. */
+.brand-mark{display:inline-flex;align-items:center;justify-content:center;gap:1px;letter-spacing:-.04em;padding-right:1px}
+.brand-mark .brand-letter{color:#fff}
+.brand-mark .brand-dot{color:var(--mint);margin:0 1px}

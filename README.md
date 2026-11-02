@@ -9,7 +9,7 @@ Não é necessário instalar dependências, usar API ou ferramenta de build. Abr
 ## Páginas
 
 - `index.html`: introdução, explicação resumida das etapas, distância euclidiana e análise de complexidade.
-- `laboratorio.html`: plano de pontos, execução passo a passo/automática, trilha de eventos e validação final contra força bruta.
+- `laboratorio.html`: plano de pontos, execução passo a passo/automática, trilha de eventos e conferência final com o método que testa todos os pares (força bruta).
 
 ## Organização
 
@@ -41,8 +41,8 @@ node tests/closest-pair.test.js
 node tests/lab-ui.test.js
 ```
 
-A primeira bateria compara a resposta do algoritmo com força bruta em entradas aleatórias e casos-limite. A segunda verifica se os pontos são desenhados na inicialização e exercita os controles principais.
+A primeira bateria compara a resposta do algoritmo com um método de referência que mede todos os pares (força bruta), em entradas aleatórias e casos-limite. A segunda verifica se os pontos são desenhados na inicialização e exercita os controles principais.
 
 ## Métrica de comparações
 
-A métrica conta as distâncias efetivamente calculadas nos casos-base e entre pontos de lados diferentes na faixa. A força bruta calcula `n(n-1)/2` distâncias. A distância mínima final é comparada entre os dois métodos.
+A métrica conta as distâncias efetivamente calculadas nos casos-base e entre pontos de lados diferentes na faixa. O método de força bruta testa todos os pares possíveis e calcula `n(n-1)/2` distâncias. A menor distância final é comparada entre os dois métodos.

@@ -186,7 +186,7 @@ assert(circleCount() === 16, 'Cenário novo não desenhou todos os pontos.');
   assert(circleCount() === expectedCount, `Pontos não foram desenhados no cenário ${levelIndex + 1}.`);
   elements.stepAllBtn.click();
   assert(elements.resultPanel.hidden === false, `Resultado ausente no cenário ${levelIndex + 1}.`);
-  assert(elements.resultSummary.textContent.includes('As duas abordagens concordam.'), `Validação com força bruta falhou no cenário ${levelIndex + 1}.`);
+  assert(elements.resultSummary.textContent.includes('Os dois métodos chegaram ao mesmo resultado.'), `Conferência com todos os pares falhou no cenário ${levelIndex + 1}.`);
 });
 
 console.log('PASS: inicialização com pontos visíveis e controles do laboratório validados.');

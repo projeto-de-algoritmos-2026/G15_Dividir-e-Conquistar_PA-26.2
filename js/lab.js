@@ -97,7 +97,7 @@
     var measured = Number.isFinite(event.distance) ? event.distance : (Number.isFinite(event.bestDistance) ? event.bestDistance : null);
     var d = measured == null ? '—' : measured.toFixed(1);
     switch (event.type) {
-      case 'intro': return { label: 'PREPARAÇÃO', icon: '✦', title: 'Vamos encontrar o par mais próximo.', description: 'O conjunto tem ' + event.totalPoints + ' pontos. Em vez de medir todas as combinações, vamos dividir o problema em partes menores.', detail: 'A solução será construída recursivamente e conferida com a força bruta ao final.' };
+      case 'intro': return { label: 'PREPARAÇÃO', icon: '✦', title: 'Vamos encontrar o par mais próximo.', description: 'O conjunto tem ' + event.totalPoints + ' pontos. Em vez de medir todas as combinações, vamos dividir o problema em partes menores.', detail: 'No final, vamos conferir a resposta calculando também a distância de todos os pares possíveis.' };
       case 'divide': return { label: 'DIVIDIR', icon: '⌁', title: 'Separar em duas metades.', description: 'Este subproblema contém ' + n + ' pontos. A linha vertical passa entre os dois pontos centrais da ordenação por x.', detail: 'Metade esquerda: ' + event.leftCount + ' pontos. Metade direita: ' + event.rightCount + '. Cada lado será resolvido independentemente.' };
       case 'base-start': return { label: 'CASO BASE', icon: '▦', title: 'O problema ficou pequeno.', description: 'Com ' + event.pointCount + ' ponto(s), não precisamos dividir mais. Basta comparar todos os pares disponíveis neste pequeno conjunto.', detail: 'Número de pares neste caso-base: ' + event.totalPairs + '.' };
       case 'base-compare': return { label: 'COMPARAÇÃO', icon: '↔', title: 'Medindo um par de pontos.', description: 'A distância entre este par é ' + d + ' unidades.' + (event.improved ? ' É a menor encontrada até agora neste subproblema.' : ' O melhor par atual continua sendo mais próximo.'), detail: 'A distância euclidiana considera a diferença horizontal e vertical entre os pontos.' };
@@ -105,7 +105,7 @@
       case 'strip': return { label: 'COMBINAR · FAIXA', icon: '▥', title: 'Investigar a faixa ao redor do corte.', description: 'A melhor distância entre os lados é δ = ' + Number(event.delta).toFixed(1) + '. Um par que atravessa o corte só pode melhorar esse valor se estiver dentro da faixa sombreada.', detail: 'Foram selecionados ' + event.stripIds.length + ' ponto(s). Na ordenação por y, cada ponto precisa examinar no máximo os sete seguintes.' };
       case 'strip-compare': return { label: 'COMPARAÇÃO NA FAIXA', icon: '⇄', title: 'Verificar um possível par cruzado.', description: 'A distância deste par é ' + d + ' unidades. ' + (event.improved ? 'Encontramos uma distância menor: a resposta melhorou!' : 'Esse par não supera a melhor distância conhecida.'), detail: 'Só comparamos pontos de lados diferentes. Pares do mesmo lado já foram tratados na recursão.' };
       case 'merge': return { label: 'COMBINAR', icon: '⌘', title: 'Unir as respostas dos dois lados.', description: 'A menor distância deste subproblema é ' + d + ' unidades. Ela pode vir da esquerda, da direita ou da faixa central.', detail: 'A resposta retorna para a chamada anterior, até chegar novamente à raiz.' };
-      case 'complete': return { label: 'CONCLUÍDO', icon: '✦', title: 'O algoritmo encontrou a resposta!', description: 'O menor par está destacado no plano. A conferência com força bruta ' + (event.verified ? 'confirmou a mesma distância.' : 'apontou uma divergência que precisa ser investigada.'), detail: 'O resultado por dividir e conquistar e o resultado por força bruta devem ter a mesma distância mínima.' };
+      case 'complete': return { label: 'CONCLUÍDO', icon: '✦', title: 'O par mais próximo foi encontrado.', description: 'O menor par está destacado no plano. A conferência pelo método que testa todos os pares ' + (event.verified ? 'encontrou a mesma distância.' : 'apontou uma diferença que precisa ser investigada.'), detail: 'Os dois métodos precisam chegar à mesma distância mínima; a diferença está na quantidade de pares que cada um mede.' };
       default: return { label: 'ETAPA', icon: '·', title: 'Executando algoritmo.', description: '', detail: '' };
     }
   }
@@ -277,7 +277,7 @@
     if (finished) {
       var p = state.run.result;
       elements.resultDistance.textContent = p.distance.toFixed(2);
-      elements.resultSummary.textContent = 'P' + p.a.id + ' e P' + p.b.id + ' formam o par mais próximo. O método usou ' + state.run.comparisons + ' comparação(ões) de distância, enquanto a força bruta fez ' + state.run.brute.comparisons + '. ' + (event.verified ? 'As duas abordagens concordam.' : 'A validação encontrou uma divergência.');
+      elements.resultSummary.textContent = 'P' + p.a.id + ' e P' + p.b.id + ' são os pontos mais próximos. Dividir e conquistar calculou ' + state.run.comparisons + ' distância(s); testar todos os pares calculou ' + state.run.brute.comparisons + '. ' + (event.verified ? 'Os dois métodos chegaram ao mesmo resultado.' : 'Os resultados não coincidiram.');
     }
     renderPlot(event);
     renderLog(event);
@@ -337,7 +337,7 @@
     else if (event.type === 'strip') hint = 'Use δ como limite horizontal: mantenha os pontos com |x − corte| ≤ δ. Depois pense na ordem por y.';
     else if (event.type === 'strip-compare') hint = 'Um par cruzado tem um ponto de cada lado. Se a diferença vertical já ultrapassa δ, os próximos não poderão melhorar a resposta.';
     else if (event.type === 'merge') hint = 'A resposta combinada é a menor entre a esquerda, a direita e os pares cruzados da faixa.';
-    else hint = 'A execução terminou. Compare o número de medições com a força bruta.';
+    else hint = 'A execução terminou. Compare o número de distâncias calculadas com o método que testa todos os pares.';
     state.hintCount += 1;
     elements.detailText.textContent = hint;
     elements.hintBtn.textContent = '✦ Dica exibida';

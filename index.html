@@ -15,7 +15,7 @@
 <body>
   <div class="site-shell">
     <header class="topbar">
-      <a class="brand" href="index.html" aria-label="Seja o Algoritmo, início"><span class="brand-mark">S<span>·</span>A</span><span>SEJA O ALGORITMO</span></a>
+      <a class="brand" href="index.html" aria-label="Seja o Algoritmo, início"><span class="brand-mark" aria-hidden="true"><span class="brand-letter">S</span><span class="brand-dot">·</span><span class="brand-letter">A</span></span><span>SEJA O ALGORITMO</span></a>
       <nav class="main-nav" aria-label="Navegação principal">
         <a class="active" href="index.html">O algoritmo</a>
         <a class="nav-cta" href="laboratorio.html">Abrir laboratório <span>↗</span></a>
@@ -26,13 +26,13 @@
       <section class="hero">
         <div class="hero-copy">
           <div class="eyebrow"><span class="eyebrow-dot"></span> ALGORITMOS · DIVIDIR E CONQUISTAR</div>
-          <h1>Não apenas leia o algoritmo.<br><em>Seja o algoritmo.</em></h1>
-          <p class="hero-lead">Encontre os dois pontos mais próximos em um plano. Entenda a estratégia e acompanhe cada decisão do algoritmo, do primeiro corte até a resposta final.</p>
+          <h1>O par de pontos mais próximo<br><em>passo a passo.</em></h1>
+          <p class="hero-lead">Aqui você entende como dividir e conquistar encontra os dois pontos mais próximos. Depois, no laboratório, pode acompanhar o algoritmo em funcionamento.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="laboratorio.html">Executar o algoritmo <span>→</span></a>
             <a class="button button-quiet" href="#como-funciona">Ver as etapas</a>
           </div>
-          <div class="hero-proof"><span class="proof-icon">✦</span> Explicação direta · Animação passo a passo · Conferência com força bruta</div>
+          <div class="hero-proof"><span class="proof-icon">✦</span> Exemplo visual · Explicação por etapas · Comparação de métodos</div>
         </div>
         <div class="hero-art" aria-label="Ilustração da divisão dos pontos e da faixa central">
           <div class="art-glow"></div>
@@ -49,13 +49,13 @@
             <path d="M18 368H542" stroke="#596781"/><path d="M18 18V368" stroke="#596781"/>
           </svg>
           <div class="art-label art-label-bottom"><span><i class="legend-dot mint"></i> Metade esquerda</span><span><i class="legend-dot amber"></i> Metade direita</span></div>
-          <div class="floating-note"><span class="note-spark">✦</span><div><b>Uma ideia poderosa</b><small>Resolver partes menores e combinar as respostas.</small></div></div>
+          <div class="floating-note"><span class="note-spark">✦</span><div><b>A estratégia</b><small>Dividir o conjunto e juntar as melhores respostas.</small></div></div>
         </div>
       </section>
 
       <section class="section-intro" id="como-funciona">
-        <div><div class="eyebrow">A ESTRATÉGIA</div><h2>Como o algoritmo pensa</h2></div>
-        <p>Ordenar, dividir, resolver e combinar. A etapa mais importante é não esquecer dos pares que podem atravessar a linha de divisão.</p>
+        <div><div class="eyebrow">COMO FUNCIONA</div><h2>O algoritmo em quatro etapas</h2></div>
+        <p>Separar os pontos em duas partes, resolver cada uma e conferir os pares que ficam perto da linha de divisão.</p>
       </section>
 
       <section class="concept-grid algorithm-steps" aria-label="Etapas do algoritmo">
@@ -71,14 +71,14 @@
       </section>
 
       <section class="feature-band" id="complexidade">
-        <div class="feature-copy"><div class="eyebrow">POR QUE DIVIDIR E CONQUISTAR?</div><h2>Menos comparações, mesma resposta.</h2><p>A força bruta compara todos os pares. Dividir e conquistar resolve subproblemas menores e examina uma faixa limitada em cada nível da recursão.</p><a class="text-link" href="laboratorio.html">Veja a diferença na prática <span>→</span></a></div>
-        <div class="feature-stats"><div><strong>O(n log n)</strong><span>Dividir e conquistar</span></div><div><strong>O(n²)</strong><span>Força bruta</span></div><div><strong>Mesmo mínimo</strong><span>Resultado conferido</span></div></div>
+        <div class="feature-copy"><div class="eyebrow">COMO COMPARAR OS MÉTODOS</div><h2>Encontrar a mesma resposta de outro jeito.</h2><p>Força bruta é o nome dado ao método mais direto: medir a distância de todos os pares possíveis. Com <b>n</b> pontos, isso significa n(n − 1) / 2 medições. Dividir e conquistar evita boa parte desse trabalho.</p><a class="text-link" href="laboratorio.html">Compare os dois no laboratório <span>→</span></a></div>
+        <div class="feature-stats"><div><strong>O(n log n)</strong><span>Dividir e conquistar</span></div><div><strong>O(n²)</strong><span>Testar todos os pares</span></div><div><strong>Mesmo mínimo</strong><span>Resultado conferido</span></div></div>
       </section>
 
-      <section class="final-cta"><div><div class="eyebrow">AGORA É SUA VEZ</div><h2>Coloque o algoritmo para trabalhar.</h2><p>Avance manualmente, anime a execução ou pule direto para o resultado.</p></div><a class="button button-primary" href="laboratorio.html">Abrir laboratório <span>→</span></a></section>
+      <section class="final-cta"><div><div class="eyebrow">PARTE PRÁTICA</div><h2>Agora acompanhe uma execução.</h2><p>Escolha um cenário e veja como cada etapa muda o plano de pontos.</p></div><a class="button button-primary" href="laboratorio.html">Ir para o laboratório <span>→</span></a></section>
     </main>
 
-    <footer class="footer"><a class="brand" href="index.html"><span class="brand-mark">S<span>·</span>A</span><span>SEJA O ALGORITMO</span></a><span>Aprender algoritmos fazendo escolhas.</span><a href="#como-funciona">Ver etapas ↑</a></footer>
+    <footer class="footer"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><span class="brand-letter">S</span><span class="brand-dot">·</span><span class="brand-letter">A</span></span><span>SEJA O ALGORITMO</span></a><span>Material de apoio para estudar algoritmos.</span><a href="#como-funciona">Ver etapas ↑</a></footer>
   </div>
 </body>
 </html>
