@@ -331,6 +331,8 @@
     var counts = countStates(world.people);
     epidemicResult = epidemicResult || {};
 
+    // Mantém o histórico epidemiológico criado por Contagio.Epidemic.
+    var history = world.stats && world.stats.history;
     world.stats = {
       S: counts.S,
       I: counts.I,
@@ -340,6 +342,7 @@
       newInfections: epidemicResult.newInfections || 0,
       recoveries: epidemicResult.recoveries || 0
     };
+    if (history) world.stats.history = history;
 
     return world.stats;
   };

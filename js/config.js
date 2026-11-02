@@ -11,6 +11,8 @@
     CONTACT_RADIUS: 22,
     INFECTION_PROB: 0.18,
     RECOVERY_DAYS: 14,
+    // 1 = imunidade total; valores menores permitem breakthrough proporcional.
+    VACCINE_EFFICACY: 1,
     HOSPITAL_CAPACITY: 45,
     MOVE_SPEED: 1.15,
 
